@@ -7,6 +7,7 @@
 //
 
 #import "LoggerMasterViewController.h"
+#import "LoggerInputViewController.h"
 
 @interface LoggerMasterViewController ()
 @property (nonatomic, strong) UIView *containerView;
@@ -54,12 +55,11 @@
 }
 
 - (void)handleLogButtonPress:(id)sender {
-    NSLog(@"Button presed");
+    LoggerInputViewController *inputVC = [[LoggerInputViewController alloc] initWithCompletionHandler:^{
+        NSLog(@"Completed");
+    }];
+    
+    [self presentViewController:inputVC animated:YES completion:nil];
 }
-
-- (void)handleStartButtonPress:(id)sender {
-    NSLog(@"Button presed");
-}
-
 
 @end
