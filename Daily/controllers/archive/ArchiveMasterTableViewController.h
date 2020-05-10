@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface MasterTableViewController : UITableViewController
+@interface ArchiveMasterTableViewController : UITableViewController
 
 @end
 

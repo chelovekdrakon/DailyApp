@@ -6,15 +6,15 @@
 //  Copyright © 2020 Фёдор Морев. All rights reserved.
 //
 
-#import "DetailsViewController.h"
+#import "ArchiveDetailsViewController.h"
 
-@interface DetailsViewController ()
+@interface ArchiveDetailsViewController ()
 @property (nonatomic, copy) NSDictionary *dayData;
 
 @property (nonatomic, strong) UIView *containerView;
 @end
 
-@implementation DetailsViewController
+@implementation ArchiveDetailsViewController
 
 - (instancetype)initWithDayData:(NSDictionary *)dayData {
     self = [super init];

@@ -14,9 +14,9 @@
 		3288CC3E24669B3A00CBC765 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3288CC3D24669B3A00CBC765 /* Assets.xcassets */; };
 		3288CC4124669B3A00CBC765 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3288CC3F24669B3A00CBC765 /* LaunchScreen.storyboard */; };
 		3288CC4424669B3A00CBC765 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 3288CC4324669B3A00CBC765 /* main.m */; };
-		3288CC4C24669D2D00CBC765 /* NavigationDailyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3288CC4B24669D2D00CBC765 /* NavigationDailyViewController.m */; };
-		32DACF612467EF810044E06C /* MasterTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 32DACF602467EF810044E06C /* MasterTableViewController.m */; };
-		32DACF642467F3DA0044E06C /* DetailsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 32DACF632467F3DA0044E06C /* DetailsViewController.m */; };
+		32DACF612467EF810044E06C /* ArchiveMasterTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 32DACF602467EF810044E06C /* ArchiveMasterTableViewController.m */; };
+		32DACF642467F3DA0044E06C /* ArchiveDetailsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 32DACF632467F3DA0044E06C /* ArchiveDetailsViewController.m */; };
+		32DACF6A246807610044E06C /* LoggerMasterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 32DACF69246807610044E06C /* LoggerMasterViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -31,12 +31,12 @@
 		3288CC4024669B3A00CBC765 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		3288CC4224669B3A00CBC765 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3288CC4324669B3A00CBC765 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		3288CC4A24669D2D00CBC765 /* NavigationDailyViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NavigationDailyViewController.h; sourceTree = "<group>"; };
-		3288CC4B24669D2D00CBC765 /* NavigationDailyViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NavigationDailyViewController.m; sourceTree = "<group>"; };
-		32DACF5F2467EF810044E06C /* MasterTableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MasterTableViewController.h; sourceTree = "<group>"; };
-		32DACF602467EF810044E06C /* MasterTableViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MasterTableViewController.m; sourceTree = "<group>"; };
-		32DACF622467F3DA0044E06C /* DetailsViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DetailsViewController.h; sourceTree = "<group>"; };
-		32DACF632467F3DA0044E06C /* DetailsViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DetailsViewController.m; sourceTree = "<group>"; };
+		32DACF5F2467EF810044E06C /* ArchiveMasterTableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ArchiveMasterTableViewController.h; sourceTree = "<group>"; };
+		32DACF602467EF810044E06C /* ArchiveMasterTableViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ArchiveMasterTableViewController.m; sourceTree = "<group>"; };
+		32DACF622467F3DA0044E06C /* ArchiveDetailsViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ArchiveDetailsViewController.h; sourceTree = "<group>"; };
+		32DACF632467F3DA0044E06C /* ArchiveDetailsViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ArchiveDetailsViewController.m; sourceTree = "<group>"; };
+		32DACF68246807610044E06C /* LoggerMasterViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LoggerMasterViewController.h; sourceTree = "<group>"; };
+		32DACF69246807610044E06C /* LoggerMasterViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LoggerMasterViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -73,12 +73,7 @@
 				3288CC2F24669B3A00CBC765 /* AppDelegate.m */,
 				3288CC3124669B3A00CBC765 /* SceneDelegate.h */,
 				3288CC3224669B3A00CBC765 /* SceneDelegate.m */,
-				3288CC4A24669D2D00CBC765 /* NavigationDailyViewController.h */,
-				3288CC4B24669D2D00CBC765 /* NavigationDailyViewController.m */,
-				32DACF5F2467EF810044E06C /* MasterTableViewController.h */,
-				32DACF602467EF810044E06C /* MasterTableViewController.m */,
-				32DACF622467F3DA0044E06C /* DetailsViewController.h */,
-				32DACF632467F3DA0044E06C /* DetailsViewController.m */,
+				32DACF65246806F30044E06C /* controllers */,
 				3288CC3724669B3A00CBC765 /* Main.storyboard */,
 				3288CC3D24669B3A00CBC765 /* Assets.xcassets */,
 				3288CC3F24669B3A00CBC765 /* LaunchScreen.storyboard */,
@@ -87,6 +82,35 @@
 				3288CC3A24669B3A00CBC765 /* Daily.xcdatamodeld */,
 			);
 			path = Daily;
+			sourceTree = "<group>";
+		};
+		32DACF65246806F30044E06C /* controllers */ = {
+			isa = PBXGroup;
+			children = (
+				32DACF67246807060044E06C /* logger */,
+				32DACF66246806FE0044E06C /* archive */,
+			);
+			path = controllers;
+			sourceTree = "<group>";
+		};
+		32DACF66246806FE0044E06C /* archive */ = {
+			isa = PBXGroup;
+			children = (
+				32DACF5F2467EF810044E06C /* ArchiveMasterTableViewController.h */,
+				32DACF602467EF810044E06C /* ArchiveMasterTableViewController.m */,
+				32DACF622467F3DA0044E06C /* ArchiveDetailsViewController.h */,
+				32DACF632467F3DA0044E06C /* ArchiveDetailsViewController.m */,
+			);
+			path = archive;
+			sourceTree = "<group>";
+		};
+		32DACF67246807060044E06C /* logger */ = {
+			isa = PBXGroup;
+			children = (
+				32DACF68246807610044E06C /* LoggerMasterViewController.h */,
+				32DACF69246807610044E06C /* LoggerMasterViewController.m */,
+			);
+			path = logger;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -161,11 +185,11 @@
 			files = (
 				3288CC4424669B3A00CBC765 /* main.m in Sources */,
 				3288CC3C24669B3A00CBC765 /* Daily.xcdatamodeld in Sources */,
+				32DACF6A246807610044E06C /* LoggerMasterViewController.m in Sources */,
 				3288CC3024669B3A00CBC765 /* AppDelegate.m in Sources */,
-				3288CC4C24669D2D00CBC765 /* NavigationDailyViewController.m in Sources */,
-				32DACF642467F3DA0044E06C /* DetailsViewController.m in Sources */,
+				32DACF642467F3DA0044E06C /* ArchiveDetailsViewController.m in Sources */,
 				3288CC3324669B3A00CBC765 /* SceneDelegate.m in Sources */,
-				32DACF612467EF810044E06C /* MasterTableViewController.m in Sources */,
+				32DACF612467EF810044E06C /* ArchiveMasterTableViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -308,6 +332,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = X4634FD8JW;
 				INFOPLIST_FILE = Daily/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -325,6 +350,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = X4634FD8JW;
 				INFOPLIST_FILE = Daily/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

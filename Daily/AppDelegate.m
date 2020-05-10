@@ -7,6 +7,8 @@
 //
 
 #import "AppDelegate.h"
+#import "LoggerMasterViewController.h"
+#import "ArchiveMasterTableViewController.h"
 
 @interface AppDelegate ()
 
@@ -14,29 +16,66 @@
 
 @implementation AppDelegate
 
-
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    // Override point for customization after application launch.
+    UIWindow *window = [[UIWindow alloc] init];
+    window.rootViewController = [AppDelegate rootViewController];
+    self.window = window;
+    [self.window makeKeyAndVisible];
+    
+    [UIView appearance].tintColor = UIColor.systemPinkColor;
+    
     return YES;
 }
 
++ (UIViewController *)rootViewController {
+    UISplitViewController *splitVC = [UISplitViewController new];
+    splitVC.preferredDisplayMode = UISplitViewControllerDisplayModePrimaryOverlay;
+    
+    UITabBarController *tabBarVC = [UITabBarController new];
+    
+    UINavigationController *firstVC = [[UINavigationController alloc] initWithRootViewController:[LoggerMasterViewController new]];
+    if (@available(iOS 13.0, *)) {
+        firstVC.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"Logger"
+                                                           image:[UIImage systemImageNamed:@"flame"]
+                                                             tag:0];
+    } else {
+        firstVC.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"Logger" image:[UIImage imageNamed:@"flame"] tag:0];
+    }
+    [firstVC setNavigationBarHidden:YES];
+    
+    UINavigationController *secondVC = [[UINavigationController alloc] initWithRootViewController:[ArchiveMasterTableViewController new]];
+    if (@available(iOS 13.0, *)) {
+        secondVC.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"Archive"
+                                                            image:[UIImage systemImageNamed:@"tray.full"]
+                                                              tag:0];
+    } else {
+        secondVC.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"Archive"
+                                                            image:[UIImage imageNamed:@"archive"]
+                                                              tag:0];
+    }
+    
+    tabBarVC.viewControllers = @[firstVC, secondVC];
+    
+    splitVC.viewControllers = @[tabBarVC];
+    
+    return splitVC;
+}
 
 #pragma mark - UISceneSession lifecycle
 
 
-- (UISceneConfiguration *)application:(UIApplication *)application configurationForConnectingSceneSession:(UISceneSession *)connectingSceneSession options:(UISceneConnectionOptions *)options {
+- (UISceneConfiguration *)application:(UIApplication *)application configurationForConnectingSceneSession:(UISceneSession *)connectingSceneSession options:(UISceneConnectionOptions *)options API_AVAILABLE(ios(13.0)){
     // Called when a new scene session is being created.
     // Use this method to select a configuration to create the new scene with.
     return [[UISceneConfiguration alloc] initWithName:@"Default Configuration" sessionRole:connectingSceneSession.role];
 }
 
 
-- (void)application:(UIApplication *)application didDiscardSceneSessions:(NSSet<UISceneSession *> *)sceneSessions {
+- (void)application:(UIApplication *)application didDiscardSceneSessions:(NSSet<UISceneSession *> *)sceneSessions  API_AVAILABLE(ios(13.0)){
     // Called when the user discards a scene session.
     // If any sessions were discarded while the application was not running, this will be called shortly after application:didFinishLaunchingWithOptions.
     // Use this method to release any resources that were specific to the discarded scenes, as they will not return.
 }
-
 
 #pragma mark - Core Data stack
 

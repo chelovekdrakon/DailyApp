@@ -7,7 +7,7 @@
 //
 
 #import "ArchiveMasterTableViewController.h"
-#import "DetailsViewController.h"
+#import "ArchiveDetailsViewController.h"
 
 @interface ArchiveMasterTableViewController ()
 @property (nonatomic, copy) NSArray<NSArray<NSDictionary *> *> *dataSource;
@@ -60,7 +60,7 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:true];
     
-    DetailsViewController *detailsVC = [[DetailsViewController alloc] initWithDayData:self.dataSource[indexPath.section][indexPath.row]];
+    ArchiveDetailsViewController *detailsVC = [[ArchiveDetailsViewController alloc] initWithDayData:self.dataSource[indexPath.section][indexPath.row]];
 //    [self.navigationController pushViewController:detailsVC animated:YES];
     [self.splitViewController showDetailViewController:detailsVC sender:self];
 }
