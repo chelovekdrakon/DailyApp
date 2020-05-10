@@ -9,12 +9,14 @@
 /* Begin PBXBuildFile section */
 		3288CC3024669B3A00CBC765 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 3288CC2F24669B3A00CBC765 /* AppDelegate.m */; };
 		3288CC3324669B3A00CBC765 /* SceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 3288CC3224669B3A00CBC765 /* SceneDelegate.m */; };
-		3288CC3624669B3A00CBC765 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3288CC3524669B3A00CBC765 /* ViewController.m */; };
 		3288CC3924669B3A00CBC765 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3288CC3724669B3A00CBC765 /* Main.storyboard */; };
 		3288CC3C24669B3A00CBC765 /* Daily.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 3288CC3A24669B3A00CBC765 /* Daily.xcdatamodeld */; };
 		3288CC3E24669B3A00CBC765 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3288CC3D24669B3A00CBC765 /* Assets.xcassets */; };
 		3288CC4124669B3A00CBC765 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3288CC3F24669B3A00CBC765 /* LaunchScreen.storyboard */; };
 		3288CC4424669B3A00CBC765 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 3288CC4324669B3A00CBC765 /* main.m */; };
+		3288CC4C24669D2D00CBC765 /* NavigationDailyViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3288CC4B24669D2D00CBC765 /* NavigationDailyViewController.m */; };
+		32DACF612467EF810044E06C /* MasterTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 32DACF602467EF810044E06C /* MasterTableViewController.m */; };
+		32DACF642467F3DA0044E06C /* DetailsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 32DACF632467F3DA0044E06C /* DetailsViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -23,14 +25,18 @@
 		3288CC2F24669B3A00CBC765 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		3288CC3124669B3A00CBC765 /* SceneDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SceneDelegate.h; sourceTree = "<group>"; };
 		3288CC3224669B3A00CBC765 /* SceneDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SceneDelegate.m; sourceTree = "<group>"; };
-		3288CC3424669B3A00CBC765 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
-		3288CC3524669B3A00CBC765 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		3288CC3824669B3A00CBC765 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		3288CC3B24669B3A00CBC765 /* Daily.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Daily.xcdatamodel; sourceTree = "<group>"; };
 		3288CC3D24669B3A00CBC765 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		3288CC4024669B3A00CBC765 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		3288CC4224669B3A00CBC765 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3288CC4324669B3A00CBC765 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		3288CC4A24669D2D00CBC765 /* NavigationDailyViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NavigationDailyViewController.h; sourceTree = "<group>"; };
+		3288CC4B24669D2D00CBC765 /* NavigationDailyViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NavigationDailyViewController.m; sourceTree = "<group>"; };
+		32DACF5F2467EF810044E06C /* MasterTableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MasterTableViewController.h; sourceTree = "<group>"; };
+		32DACF602467EF810044E06C /* MasterTableViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MasterTableViewController.m; sourceTree = "<group>"; };
+		32DACF622467F3DA0044E06C /* DetailsViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DetailsViewController.h; sourceTree = "<group>"; };
+		32DACF632467F3DA0044E06C /* DetailsViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DetailsViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -67,8 +73,12 @@
 				3288CC2F24669B3A00CBC765 /* AppDelegate.m */,
 				3288CC3124669B3A00CBC765 /* SceneDelegate.h */,
 				3288CC3224669B3A00CBC765 /* SceneDelegate.m */,
-				3288CC3424669B3A00CBC765 /* ViewController.h */,
-				3288CC3524669B3A00CBC765 /* ViewController.m */,
+				3288CC4A24669D2D00CBC765 /* NavigationDailyViewController.h */,
+				3288CC4B24669D2D00CBC765 /* NavigationDailyViewController.m */,
+				32DACF5F2467EF810044E06C /* MasterTableViewController.h */,
+				32DACF602467EF810044E06C /* MasterTableViewController.m */,
+				32DACF622467F3DA0044E06C /* DetailsViewController.h */,
+				32DACF632467F3DA0044E06C /* DetailsViewController.m */,
 				3288CC3724669B3A00CBC765 /* Main.storyboard */,
 				3288CC3D24669B3A00CBC765 /* Assets.xcassets */,
 				3288CC3F24669B3A00CBC765 /* LaunchScreen.storyboard */,
@@ -150,10 +160,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				3288CC4424669B3A00CBC765 /* main.m in Sources */,
-				3288CC3624669B3A00CBC765 /* ViewController.m in Sources */,
 				3288CC3C24669B3A00CBC765 /* Daily.xcdatamodeld in Sources */,
 				3288CC3024669B3A00CBC765 /* AppDelegate.m in Sources */,
+				3288CC4C24669D2D00CBC765 /* NavigationDailyViewController.m in Sources */,
+				32DACF642467F3DA0044E06C /* DetailsViewController.m in Sources */,
 				3288CC3324669B3A00CBC765 /* SceneDelegate.m in Sources */,
+				32DACF612467EF810044E06C /* MasterTableViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -8,6 +8,8 @@
 
 #import "SceneDelegate.h"
 #import "AppDelegate.h"
+#import "NavigationDailyViewController.h"
+#import "MasterTableViewController.h"
 
 @interface SceneDelegate ()
 
@@ -17,9 +19,36 @@
 
 
 - (void)scene:(UIScene *)scene willConnectToSession:(UISceneSession *)session options:(UISceneConnectionOptions *)connectionOptions {
-    // Use this method to optionally configure and attach the UIWindow `window` to the provided UIWindowScene `scene`.
-    // If using a storyboard, the `window` property will automatically be initialized and attached to the scene.
-    // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
+    UIWindow *window = [[UIWindow alloc] initWithWindowScene:(UIWindowScene *)scene];
+    window.rootViewController = [self rootViewController];
+    self.window = window;
+    [self.window makeKeyAndVisible];
+    
+    [UIView appearance].tintColor = UIColor.systemPinkColor;
+}
+
+- (UIViewController *)rootViewController {
+    UISplitViewController *splitVC = [UISplitViewController new];
+    splitVC.preferredDisplayMode = UISplitViewControllerDisplayModeAllVisible;
+    
+    UITabBarController *tabBarVC = [UITabBarController new];
+    
+    UINavigationController *firstVC = [[UINavigationController alloc] initWithRootViewController:[NavigationDailyViewController new]];
+    firstVC.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"Logger"
+                                                       image:[UIImage systemImageNamed:@"flame"]
+                                                         tag:0];
+    
+    
+    UINavigationController *secondVC = [[UINavigationController alloc] initWithRootViewController:[MasterTableViewController new]];
+    secondVC.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"Archive"
+                                                       image:[UIImage systemImageNamed:@"tray.full"]
+                                                         tag:0];
+    
+    tabBarVC.viewControllers = @[firstVC, secondVC];
+    
+    splitVC.viewControllers = @[tabBarVC];
+    
+    return splitVC;
 }
 
 

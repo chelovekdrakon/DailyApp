@@ -1,5 +1,5 @@
 //
-//  ViewController.h
+//  NavigationDailyViewController.h
 //  Daily
 //
 //  Created by Фёдор Морев on 5/9/20.
@@ -8,8 +8,10 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ViewController : UIViewController
+NS_ASSUME_NONNULL_BEGIN
 
+@interface NavigationDailyViewController : UIViewController
 
 @end
 
+NS_ASSUME_NONNULL_END
