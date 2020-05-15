@@ -100,8 +100,9 @@
     // From... Date picker init
     UILabel *fromDatePickerLabel = [[UILabel alloc] init];
     fromDatePickerLabel.translatesAutoresizingMaskIntoConstraints = NO;
-    fromDatePickerLabel.text = @"The Time Activity was started";
+    fromDatePickerLabel.text = @"From";
     [fromDatePickerLabel sizeToFit];
+    fromDatePickerLabel.textAlignment = NSTextAlignmentCenter;
     
     UIDatePicker *fromDatePicker = [[UIDatePicker alloc] init];
     [fromDatePicker setLocale:locale];
@@ -114,18 +115,35 @@
     
     [NSLayoutConstraint activateConstraints:@[
         [fromDatePickerLabel.topAnchor constraintEqualToAnchor:titleLabelDividerView.bottomAnchor constant:20.0f],
+        [fromDatePickerLabel.widthAnchor constraintEqualToAnchor:self.modalView.widthAnchor multiplier:0.5 constant:-(self.modalView.layoutMargins.left + self.modalView.layoutMargins.right)],
         [fromDatePickerLabel.leadingAnchor constraintEqualToAnchor:self.modalView.leadingAnchor constant:self.modalView.layoutMargins.left],
         
         [fromDatePicker.topAnchor constraintEqualToAnchor:fromDatePickerLabel.bottomAnchor constant:10.0f],
-        [fromDatePicker.centerXAnchor constraintEqualToAnchor:self.modalView.centerXAnchor],
+        [fromDatePicker.leadingAnchor constraintEqualToAnchor:fromDatePickerLabel.leadingAnchor],
+        [fromDatePicker.widthAnchor constraintEqualToAnchor:fromDatePickerLabel.widthAnchor],
     ]];
     
+    
+    // From.. To.. "|" divider
+    
+    UIView *datePickersDivider = [[UIView alloc] init];
+    datePickersDivider.backgroundColor = [UIColor darkTextColor];
+    datePickersDivider.translatesAutoresizingMaskIntoConstraints = NO;
+    [self.modalView addSubview:datePickersDivider];
+    
+    [NSLayoutConstraint activateConstraints:@[
+        [datePickersDivider.topAnchor constraintEqualToAnchor:fromDatePickerLabel.topAnchor],
+        [datePickersDivider.leadingAnchor constraintEqualToAnchor:fromDatePickerLabel.trailingAnchor constant:5.0f],
+        [datePickersDivider.bottomAnchor constraintEqualToAnchor:fromDatePicker.bottomAnchor],
+        [datePickersDivider.widthAnchor constraintEqualToConstant:1.0f],
+    ]];
     
     // To... Date picker init
     UILabel *toDatePickerLabel = [[UILabel alloc] init];
     toDatePickerLabel.translatesAutoresizingMaskIntoConstraints = NO;
-    toDatePickerLabel.text = @"The Time Activity was finished";
+    toDatePickerLabel.text = @"To";
     [toDatePickerLabel sizeToFit];
+    toDatePickerLabel.textAlignment = NSTextAlignmentCenter;
     
     UIDatePicker *toDatePicker = [[UIDatePicker alloc] init];
     [toDatePicker setLocale:locale];
@@ -137,12 +155,23 @@
     [self.modalView addSubview:toDatePicker];
     
     [NSLayoutConstraint activateConstraints:@[
-        [toDatePickerLabel.topAnchor constraintEqualToAnchor:fromDatePicker.bottomAnchor constant:20.0f],
-        [toDatePickerLabel.leadingAnchor constraintEqualToAnchor:self.modalView.leadingAnchor constant:self.modalView.layoutMargins.left],
+        [toDatePickerLabel.topAnchor constraintEqualToAnchor:fromDatePickerLabel.topAnchor],
+        [toDatePickerLabel.leadingAnchor constraintEqualToAnchor:datePickersDivider.trailingAnchor constant:5.0f],
+        [toDatePickerLabel.trailingAnchor constraintEqualToAnchor:self.modalView.trailingAnchor constant:self.modalView.layoutMargins.right],
         
-        [toDatePicker.topAnchor constraintEqualToAnchor:toDatePickerLabel.bottomAnchor constant:10.0f],
-        [toDatePicker.centerXAnchor constraintEqualToAnchor:self.modalView.centerXAnchor],
+        [toDatePicker.topAnchor constraintEqualToAnchor:fromDatePicker.topAnchor],
+        [toDatePicker.leadingAnchor constraintEqualToAnchor:toDatePickerLabel.leadingAnchor],
+        [toDatePicker.trailingAnchor constraintEqualToAnchor:toDatePickerLabel.trailingAnchor],
+        [toDatePicker.bottomAnchor constraintEqualToAnchor:fromDatePicker.bottomAnchor],
     ]];
+    
+//    [NSLayoutConstraint activateConstraints:@[
+//        [toDatePickerLabel.topAnchor constraintEqualToAnchor:fromDatePicker.bottomAnchor constant:20.0f],
+//        [toDatePickerLabel.leadingAnchor constraintEqualToAnchor:self.modalView.leadingAnchor constant:self.modalView.layoutMargins.left],
+//
+//        [toDatePicker.topAnchor constraintEqualToAnchor:toDatePickerLabel.bottomAnchor constant:10.0f],
+//        [toDatePicker.centerXAnchor constraintEqualToAnchor:self.modalView.centerXAnchor],
+//    ]];
 }
 
 @end
