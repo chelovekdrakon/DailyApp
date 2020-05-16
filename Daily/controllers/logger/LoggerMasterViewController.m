@@ -11,14 +11,30 @@
 
 @interface LoggerMasterViewController ()
 @property (nonatomic, strong) UIView *containerView;
+@property (nonatomic, strong) NSPersistentContainer *persistentContainer;
 @end
 
 @implementation LoggerMasterViewController
+
+- (instancetype)initWithPersistentContainer:(NSPersistentContainer *)persistentContainer {
+    self = [super init];
+    if (self) {
+        _persistentContainer = persistentContainer;
+    }
+    return self;
+}
 
 #pragma mark - Lifecycle
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    if (self.persistentContainer == nil) {
+        NSException *exception = [[NSException alloc] initWithName:@"wrong-init"
+                                                            reason:@"LoggerMasterViewController should be initialized with initWithPersistentContainer method"
+                                                          userInfo:nil];
+        @throw exception;
+    }
     
     self.view.backgroundColor = UIColor.whiteColor;
     

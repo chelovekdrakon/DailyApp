@@ -11,14 +11,16 @@
 
 @interface ArchiveMasterTableViewController ()
 @property (nonatomic, copy) NSArray<NSArray<NSDictionary *> *> *dataSource;
+@property (nonatomic, strong) NSPersistentContainer *persistentContainer;
 @end
 
 @implementation ArchiveMasterTableViewController
 
-- (instancetype)init {
+- (instancetype)initWithPersistentContainer:(NSPersistentContainer *)persistentContainer {
     self = [super init];
     if (self) {
         _dataSource = [self getDataSource];
+        _persistentContainer = persistentContainer;
     }
     return self;
 }
@@ -27,6 +29,13 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    if (self.persistentContainer == nil) {
+        NSException *exception = [[NSException alloc] initWithName:@"wrong-init"
+                                                            reason:@"ArchiveMasterTableViewController should be initialized with initWithPersistentContainer method"
+                                                          userInfo:nil];
+        @throw exception;
+    }
     
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;

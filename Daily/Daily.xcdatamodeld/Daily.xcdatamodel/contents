@@ -1,4 +1,24 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="1" systemVersion="11A491" minimumToolsVersion="Automatic" sourceLanguage="Objective-C" usedWithCloudKit="false" userDefinedModelVersionIdentifier="">
-    <elements/>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="16119" systemVersion="19E287" minimumToolsVersion="Automatic" sourceLanguage="Objective-C" userDefinedModelVersionIdentifier="">
+    <entity name="Activity" representedClassName="Activity" syncable="YES" codeGenerationType="class">
+        <attribute name="from" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="spentTime" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="to" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <relationship name="daily" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Daily" inverseName="activities" inverseEntity="Daily"/>
+        <relationship name="type" maxCount="1" deletionRule="Nullify" destinationEntity="ActivityType" inverseName="activities" inverseEntity="ActivityType"/>
+    </entity>
+    <entity name="ActivityType" representedClassName="ActivityType" syncable="YES" codeGenerationType="class">
+        <attribute name="clarification" optional="YES" attributeType="String"/>
+        <attribute name="type" attributeType="String"/>
+        <relationship name="activities" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Activity" inverseName="type" inverseEntity="Activity"/>
+    </entity>
+    <entity name="Daily" representedClassName="Daily" syncable="YES" codeGenerationType="class">
+        <attribute name="date" attributeType="Date" usesScalarValueType="NO"/>
+        <relationship name="activities" toMany="YES" minCount="1" deletionRule="Nullify" destinationEntity="Activity" inverseName="daily" inverseEntity="Activity"/>
+    </entity>
+    <elements>
+        <element name="ActivityType" positionX="-54" positionY="-9" width="128" height="88"/>
+        <element name="Daily" positionX="584.80859375" positionY="-103.97265625" width="128" height="73"/>
+        <element name="Activity" positionX="221.7578125" positionY="-23.84765625" width="128" height="118"/>
+    </elements>
 </model>

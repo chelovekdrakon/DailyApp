@@ -20,7 +20,7 @@
 
 - (void)scene:(UIScene *)scene willConnectToSession:(UISceneSession *)session options:(UISceneConnectionOptions *)connectionOptions  API_AVAILABLE(ios(13.0)){
     UIWindow *window = [[UIWindow alloc] initWithWindowScene:(UIWindowScene *)scene];
-    window.rootViewController = [AppDelegate rootViewController];
+    window.rootViewController = [(AppDelegate *)UIApplication.sharedApplication.delegate rootViewController];
     self.window = window;
     [self.window makeKeyAndVisible];
     

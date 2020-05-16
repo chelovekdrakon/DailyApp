@@ -18,7 +18,7 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     UIWindow *window = [[UIWindow alloc] init];
-    window.rootViewController = [AppDelegate rootViewController];
+    window.rootViewController = [self rootViewController];
     self.window = window;
     [self.window makeKeyAndVisible];
     
@@ -27,34 +27,41 @@
     return YES;
 }
 
-+ (UIViewController *)rootViewController {
+- (UIViewController *)rootViewController {
+    // Split VC
     UISplitViewController *splitVC = [UISplitViewController new];
     splitVC.preferredDisplayMode = UISplitViewControllerDisplayModePrimaryOverlay;
     
+    // Tab VC
     UITabBarController *tabBarVC = [UITabBarController new];
     
-    UINavigationController *firstVC = [[UINavigationController alloc] initWithRootViewController:[LoggerMasterViewController new]];
+    // First Tab
+    LoggerMasterViewController *loggerVC = [[LoggerMasterViewController alloc] initWithPersistentContainer:[self persistentContainer]];
+    UINavigationController *firstTabVC = [[UINavigationController alloc] initWithRootViewController:loggerVC];
     if (@available(iOS 13.0, *)) {
-        firstVC.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"Logger"
+        firstTabVC.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"Logger"
                                                            image:[UIImage systemImageNamed:@"flame"]
                                                              tag:0];
     } else {
-        firstVC.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"Logger" image:[UIImage imageNamed:@"flame"] tag:0];
+        firstTabVC.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"Logger" image:[UIImage imageNamed:@"flame"] tag:0];
     }
-    [firstVC setNavigationBarHidden:YES];
+    [firstTabVC setNavigationBarHidden:YES];
     
-    UINavigationController *secondVC = [[UINavigationController alloc] initWithRootViewController:[ArchiveMasterTableViewController new]];
+    
+    // Second Tab
+    ArchiveMasterTableViewController *archiveVC = [[ArchiveMasterTableViewController alloc] initWithPersistentContainer:[self persistentContainer]];
+    UINavigationController *secondTabVC = [[UINavigationController alloc] initWithRootViewController:archiveVC];
     if (@available(iOS 13.0, *)) {
-        secondVC.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"Archive"
+        secondTabVC.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"Archive"
                                                             image:[UIImage systemImageNamed:@"tray.full"]
                                                               tag:0];
     } else {
-        secondVC.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"Archive"
+        secondTabVC.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"Archive"
                                                             image:[UIImage imageNamed:@"archive"]
                                                               tag:0];
     }
     
-    tabBarVC.viewControllers = @[firstVC, secondVC];
+    tabBarVC.viewControllers = @[firstTabVC, secondTabVC];
     
     splitVC.viewControllers = @[tabBarVC];
     

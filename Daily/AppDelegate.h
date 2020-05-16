@@ -15,7 +15,7 @@
 @property (strong, nonatomic) UIWindow * window;
 
 - (void)saveContext;
-+ (UIViewController *)rootViewController;
+- (UIViewController *)rootViewController;
 
 @end
 

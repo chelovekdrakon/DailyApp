@@ -7,11 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <CoreData/CoreData.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface LoggerMasterViewController : UIViewController
-
+- (instancetype)initWithPersistentContainer:(NSPersistentContainer *)persistentContainer;
 @end
 
 NS_ASSUME_NONNULL_END
