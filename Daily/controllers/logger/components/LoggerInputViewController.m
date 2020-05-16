@@ -8,7 +8,7 @@
 
 #import "LoggerInputViewController.h"
 
-@interface LoggerInputViewController ()
+@interface LoggerInputViewController() <UITextViewDelegate>
 @property (nonatomic, copy) CompletionHandler completionHandler;
 
 @property (nonatomic, strong) UIView *containerView;
@@ -24,6 +24,8 @@
     }
     return self;
 }
+
+#pragma mark - Lifecycle
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -41,14 +43,65 @@
         [self.containerView.trailingAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.trailingAnchor],
     ]];
     
-    [self drawModal];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
+    [self drawModal];
+    
     self.modalView.layer.cornerRadius = 20.0f;
 }
+
+#pragma mark - Keyboard
+
+- (void)keyboardWillShow:(NSNotification *)notification {
+    [UIView animateWithDuration:0.25 animations:^{
+        CGRect keyboardRect = [[notification.userInfo objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
+        
+        CGRect newFrame = self.containerView.frame;
+        newFrame.origin.y -= (keyboardRect.size.height / 2);
+        
+        [self.containerView setFrame:newFrame];
+    } completion:^(BOOL finished) {
+        NSLog(@"keyboardWillShow");
+    }];
+}
+
+- (void)keyboardWillHide:(NSNotification *)notification {
+    [UIView animateWithDuration:0.25 animations:^{
+        CGRect keyboardRect = [[notification.userInfo objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue];
+        
+        CGRect newFrame = self.containerView.frame;
+        newFrame.origin.y += (keyboardRect.size.height / 2);
+        
+        [self.containerView setFrame:newFrame];
+    } completion:^(BOOL finished) {
+        NSLog(@"keyboardWillHide");
+    }];
+}
+
+#pragma mark - UITextViewDelegate
+
+- (void)textViewDidEndEditing:(UITextView *)textView {
+    NSLog(@"did end editing");
+}
+
+#pragma mark - Button
+
+- (void)handleLogPress:(id)sender {
+    
+}
+
+#pragma mark - UITouch
+
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
+    [self.containerView endEditing:YES];
+}
+
+#pragma mark - Helpers
 
 - (void)drawModal {
     // Container init
@@ -73,13 +126,11 @@
     titleLabel.translatesAutoresizingMaskIntoConstraints = NO;
     titleLabel.text = @"Log your Recent Activity";
     [titleLabel sizeToFit];
-    
     [self.modalView addSubview:titleLabel];
     
     UIView *titleLabelDividerView = [[UIView alloc] init];
     titleLabelDividerView.backgroundColor = [UIColor darkTextColor];
     titleLabelDividerView.translatesAutoresizingMaskIntoConstraints = NO;
-    
     [self.modalView addSubview:titleLabelDividerView];
     
     [NSLayoutConstraint activateConstraints:@[
@@ -94,23 +145,21 @@
     
     
     // Date Pickers init
-    
     NSLocale *locale = [[NSLocale alloc] initWithLocaleIdentifier:@"ru_RU"];
     
     // From... Date picker init
     UILabel *fromDatePickerLabel = [[UILabel alloc] init];
     fromDatePickerLabel.translatesAutoresizingMaskIntoConstraints = NO;
     fromDatePickerLabel.text = @"From";
-    [fromDatePickerLabel sizeToFit];
+//    [fromDatePickerLabel sizeToFit];
     fromDatePickerLabel.textAlignment = NSTextAlignmentCenter;
+    [self.modalView addSubview:fromDatePickerLabel];
     
     UIDatePicker *fromDatePicker = [[UIDatePicker alloc] init];
     [fromDatePicker setLocale:locale];
     fromDatePicker.translatesAutoresizingMaskIntoConstraints = NO;
     fromDatePicker.date = [NSDate date];
     fromDatePicker.datePickerMode = UIDatePickerModeTime;
-    
-    [self.modalView addSubview:fromDatePickerLabel];
     [self.modalView addSubview:fromDatePicker];
     
     [NSLayoutConstraint activateConstraints:@[
@@ -118,14 +167,12 @@
         [fromDatePickerLabel.widthAnchor constraintEqualToAnchor:self.modalView.widthAnchor multiplier:0.5 constant:-(self.modalView.layoutMargins.left + self.modalView.layoutMargins.right)],
         [fromDatePickerLabel.leadingAnchor constraintEqualToAnchor:self.modalView.leadingAnchor constant:self.modalView.layoutMargins.left],
         
-        [fromDatePicker.topAnchor constraintEqualToAnchor:fromDatePickerLabel.bottomAnchor constant:10.0f],
+        [fromDatePicker.topAnchor constraintEqualToAnchor:fromDatePickerLabel.bottomAnchor],
         [fromDatePicker.leadingAnchor constraintEqualToAnchor:fromDatePickerLabel.leadingAnchor],
         [fromDatePicker.widthAnchor constraintEqualToAnchor:fromDatePickerLabel.widthAnchor],
     ]];
     
-    
     // From.. To.. "|" divider
-    
     UIView *datePickersDivider = [[UIView alloc] init];
     datePickersDivider.backgroundColor = [UIColor darkTextColor];
     datePickersDivider.translatesAutoresizingMaskIntoConstraints = NO;
@@ -142,22 +189,22 @@
     UILabel *toDatePickerLabel = [[UILabel alloc] init];
     toDatePickerLabel.translatesAutoresizingMaskIntoConstraints = NO;
     toDatePickerLabel.text = @"To";
-    [toDatePickerLabel sizeToFit];
+//    [toDatePickerLabel sizeToFit];
     toDatePickerLabel.textAlignment = NSTextAlignmentCenter;
+    [self.modalView addSubview:toDatePickerLabel];
     
     UIDatePicker *toDatePicker = [[UIDatePicker alloc] init];
     [toDatePicker setLocale:locale];
     toDatePicker.translatesAutoresizingMaskIntoConstraints = NO;
     toDatePicker.date = [NSDate date];
     toDatePicker.datePickerMode = UIDatePickerModeTime;
-    
-    [self.modalView addSubview:toDatePickerLabel];
     [self.modalView addSubview:toDatePicker];
+    
     
     [NSLayoutConstraint activateConstraints:@[
         [toDatePickerLabel.topAnchor constraintEqualToAnchor:fromDatePickerLabel.topAnchor],
         [toDatePickerLabel.leadingAnchor constraintEqualToAnchor:datePickersDivider.trailingAnchor constant:5.0f],
-        [toDatePickerLabel.trailingAnchor constraintEqualToAnchor:self.modalView.trailingAnchor constant:self.modalView.layoutMargins.right],
+        [toDatePickerLabel.trailingAnchor constraintEqualToAnchor:self.modalView.trailingAnchor constant:-self.modalView.layoutMargins.right],
         
         [toDatePicker.topAnchor constraintEqualToAnchor:fromDatePicker.topAnchor],
         [toDatePicker.leadingAnchor constraintEqualToAnchor:toDatePickerLabel.leadingAnchor],
@@ -165,13 +212,53 @@
         [toDatePicker.bottomAnchor constraintEqualToAnchor:fromDatePicker.bottomAnchor],
     ]];
     
-//    [NSLayoutConstraint activateConstraints:@[
-//        [toDatePickerLabel.topAnchor constraintEqualToAnchor:fromDatePicker.bottomAnchor constant:20.0f],
-//        [toDatePickerLabel.leadingAnchor constraintEqualToAnchor:self.modalView.leadingAnchor constant:self.modalView.layoutMargins.left],
-//
-//        [toDatePicker.topAnchor constraintEqualToAnchor:toDatePickerLabel.bottomAnchor constant:10.0f],
-//        [toDatePicker.centerXAnchor constraintEqualToAnchor:self.modalView.centerXAnchor],
-//    ]];
+    
+    // Description Input
+    UILabel *descriptionLabel = [[UILabel alloc] init];
+    descriptionLabel.translatesAutoresizingMaskIntoConstraints = NO;
+    descriptionLabel.text = @"Describe what you have been done below";
+    [descriptionLabel sizeToFit];
+    descriptionLabel.textAlignment = NSTextAlignmentCenter;
+    [self.modalView addSubview:descriptionLabel];
+    
+    UITextView *descriptionTextView = [[UITextView alloc] init];
+    descriptionTextView.translatesAutoresizingMaskIntoConstraints = NO;
+    descriptionTextView.scrollEnabled = NO;
+    descriptionTextView.layer.borderWidth = 1.0f;
+    descriptionTextView.layer.borderColor = [UIColor systemPinkColor].CGColor;
+    descriptionTextView.layer.cornerRadius = 5.0f;
+    [descriptionTextView setFont:[UIFont systemFontOfSize:15.0f]];
+    descriptionTextView.delegate = self;
+    [self.modalView addSubview:descriptionTextView];
+    
+    [NSLayoutConstraint activateConstraints:@[
+        [descriptionLabel.topAnchor constraintEqualToAnchor:datePickersDivider.bottomAnchor constant:20.0f],
+        [descriptionLabel.centerXAnchor constraintEqualToAnchor:self.modalView.centerXAnchor],
+        
+        [descriptionTextView.topAnchor constraintEqualToAnchor:descriptionLabel.bottomAnchor constant:10.0f],
+        [descriptionTextView.leadingAnchor constraintEqualToAnchor:self.modalView.leadingAnchor constant:self.modalView.layoutMargins.left],
+        [descriptionTextView.trailingAnchor constraintEqualToAnchor:self.modalView.trailingAnchor constant:-self.modalView.layoutMargins.right],
+    ]];
+    
+    
+    // Log Button
+    UIButton *logButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    [logButton.titleLabel setFont:[UIFont boldSystemFontOfSize:16.0f]];
+    [logButton setTitle:@"Log Activity" forState:UIControlStateNormal];
+    [logButton setTitleColor:UIColor.yellowColor forState:UIControlStateSelected];
+    logButton.contentEdgeInsets = UIEdgeInsetsMake(0, 15, 0, 15);
+    [logButton sizeToFit];
+    logButton.translatesAutoresizingMaskIntoConstraints = NO;
+    logButton.backgroundColor = UIColor.blackColor;
+    [logButton addTarget:self action:@selector(handleLogPress:) forControlEvents:UIControlEventTouchUpInside];
+    [self.modalView addSubview:logButton];
+    
+    [NSLayoutConstraint activateConstraints:@[
+        [logButton.topAnchor constraintEqualToAnchor:descriptionTextView.bottomAnchor constant:20.0f],
+        [logButton.centerXAnchor constraintEqualToAnchor:self.modalView.centerXAnchor],
+        [logButton.heightAnchor constraintEqualToAnchor:logButton.widthAnchor],
+    ]];
+    logButton.layer.cornerRadius = logButton.frame.size.width / 2;
 }
 
 @end

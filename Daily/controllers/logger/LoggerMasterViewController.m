@@ -28,10 +28,10 @@
     self.containerView = containerView;
     
     UIButton *logButton = [UIButton buttonWithType:UIButtonTypeSystem];
-    [logButton.titleLabel setFont:[UIFont boldSystemFontOfSize:16]];
+    [logButton.titleLabel setFont:[UIFont boldSystemFontOfSize:16.0f]];
     [logButton setTitle:@"Log Activity" forState:UIControlStateNormal];
     [logButton setTitleColor:UIColor.yellowColor forState:UIControlStateSelected];
-    logButton.contentEdgeInsets = UIEdgeInsetsMake(5, 5, 5, 5);
+    logButton.contentEdgeInsets = UIEdgeInsetsMake(0, 15, 0, 15);
     [logButton sizeToFit];
     logButton.translatesAutoresizingMaskIntoConstraints = NO;
     logButton.backgroundColor = UIColor.blackColor;
@@ -58,6 +58,7 @@
     LoggerInputViewController *inputVC = [[LoggerInputViewController alloc] initWithCompletionHandler:^{
         NSLog(@"Completed");
     }];
+    inputVC.modalPresentationStyle = UIModalPresentationPopover;
     
     [self presentViewController:inputVC animated:YES completion:nil];
 }
