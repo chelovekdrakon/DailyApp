@@ -55,8 +55,8 @@
 }
 
 - (void)handleLogButtonPress:(id)sender {
-    LoggerInputViewController *inputVC = [[LoggerInputViewController alloc] initWithCompletionHandler:^{
-        NSLog(@"Completed");
+    LoggerInputViewController *inputVC = [[LoggerInputViewController alloc] initWithCompletionHandler:^(NSDate * _Nonnull fromDate, NSDate * _Nonnull toDate, NSString * _Nonnull activityDescription) {
+        NSLog(@"");
     }];
     inputVC.modalPresentationStyle = UIModalPresentationPopover;
     

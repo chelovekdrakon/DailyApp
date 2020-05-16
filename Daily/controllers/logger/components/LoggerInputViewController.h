@@ -8,7 +8,11 @@
 
 #import <UIKit/UIKit.h>
 
-typedef void (^CompletionHandler)(void);
+typedef void(^CompletionHandler)(
+                                 NSDate * _Nonnull fromDate,
+                                 NSDate * _Nonnull toDate,
+                                 NSString * _Nonnull activityDescription
+                                 );
 
 NS_ASSUME_NONNULL_BEGIN
 

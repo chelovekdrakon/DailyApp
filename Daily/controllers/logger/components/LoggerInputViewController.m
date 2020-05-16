@@ -11,8 +11,12 @@
 @interface LoggerInputViewController() <UITextViewDelegate>
 @property (nonatomic, copy) CompletionHandler completionHandler;
 
-@property (nonatomic, strong) UIView *containerView;
 @property (nonatomic, strong) UIView *modalView;
+@property (nonatomic, strong) UIView *containerView;
+
+@property (nonatomic, strong) UIDatePicker *fromDatePicker;
+@property (nonatomic, strong) UIDatePicker *toDatePicker;
+@property (nonatomic, strong) UITextView *descriptionTextView;
 @end
 
 @implementation LoggerInputViewController
@@ -24,6 +28,7 @@
     }
     return self;
 }
+
 
 #pragma mark - Lifecycle
 
@@ -55,6 +60,7 @@
     self.modalView.layer.cornerRadius = 20.0f;
 }
 
+
 #pragma mark - Keyboard
 
 - (void)keyboardWillShow:(NSNotification *)notification {
@@ -65,9 +71,7 @@
         newFrame.origin.y -= (keyboardRect.size.height / 2);
         
         [self.containerView setFrame:newFrame];
-    } completion:^(BOOL finished) {
-        NSLog(@"keyboardWillShow");
-    }];
+    } completion:nil];
 }
 
 - (void)keyboardWillHide:(NSNotification *)notification {
@@ -78,10 +82,9 @@
         newFrame.origin.y += (keyboardRect.size.height / 2);
         
         [self.containerView setFrame:newFrame];
-    } completion:^(BOOL finished) {
-        NSLog(@"keyboardWillHide");
-    }];
+    } completion:nil];
 }
+
 
 #pragma mark - UITextViewDelegate
 
@@ -89,17 +92,40 @@
     NSLog(@"did end editing");
 }
 
+
 #pragma mark - Button
 
 - (void)handleLogPress:(id)sender {
+    __weak LoggerInputViewController *weakSelf = self;
     
+    if (self.descriptionTextView.hasText == NO) {
+        UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Provide Activity Description"
+                                       message:nil
+                                       preferredStyle:UIAlertControllerStyleAlert];
+        
+        UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"OK"
+                                                                style:UIAlertActionStyleDefault
+                                                              handler:^(UIAlertAction * action) {
+            [weakSelf.descriptionTextView becomeFirstResponder];
+        }];
+         
+        [alert addAction:defaultAction];
+        
+        [self presentViewController:alert animated:YES completion:nil];
+    } else {
+        [self dismissViewControllerAnimated:YES completion:^{
+            weakSelf.completionHandler(weakSelf.fromDatePicker.date, weakSelf.toDatePicker.date, weakSelf.descriptionTextView.text);
+        }];
+    }
 }
+
 
 #pragma mark - UITouch
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
     [self.containerView endEditing:YES];
 }
+
 
 #pragma mark - Helpers
 
@@ -161,6 +187,7 @@
     fromDatePicker.date = [NSDate date];
     fromDatePicker.datePickerMode = UIDatePickerModeTime;
     [self.modalView addSubview:fromDatePicker];
+    self.fromDatePicker = fromDatePicker;
     
     [NSLayoutConstraint activateConstraints:@[
         [fromDatePickerLabel.topAnchor constraintEqualToAnchor:titleLabelDividerView.bottomAnchor constant:20.0f],
@@ -199,6 +226,7 @@
     toDatePicker.date = [NSDate date];
     toDatePicker.datePickerMode = UIDatePickerModeTime;
     [self.modalView addSubview:toDatePicker];
+    self.toDatePicker = toDatePicker;
     
     
     [NSLayoutConstraint activateConstraints:@[
@@ -230,6 +258,7 @@
     [descriptionTextView setFont:[UIFont systemFontOfSize:15.0f]];
     descriptionTextView.delegate = self;
     [self.modalView addSubview:descriptionTextView];
+    self.descriptionTextView = descriptionTextView;
     
     [NSLayoutConstraint activateConstraints:@[
         [descriptionLabel.topAnchor constraintEqualToAnchor:datePickersDivider.bottomAnchor constant:20.0f],
@@ -245,7 +274,6 @@
     UIButton *logButton = [UIButton buttonWithType:UIButtonTypeSystem];
     [logButton.titleLabel setFont:[UIFont boldSystemFontOfSize:16.0f]];
     [logButton setTitle:@"Log Activity" forState:UIControlStateNormal];
-    [logButton setTitleColor:UIColor.yellowColor forState:UIControlStateSelected];
     logButton.contentEdgeInsets = UIEdgeInsetsMake(0, 15, 0, 15);
     [logButton sizeToFit];
     logButton.translatesAutoresizingMaskIntoConstraints = NO;
