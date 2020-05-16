@@ -36,7 +36,7 @@
     UITabBarController *tabBarVC = [UITabBarController new];
     
     // First Tab
-    LoggerMasterViewController *loggerVC = [[LoggerMasterViewController alloc] initWithPersistentContainer:[self persistentContainer]];
+    LoggerMasterViewController *loggerVC = [[LoggerMasterViewController alloc] initWithPersistentContainer:self.persistentContainer];
     UINavigationController *firstTabVC = [[UINavigationController alloc] initWithRootViewController:loggerVC];
     if (@available(iOS 13.0, *)) {
         firstTabVC.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"Logger"
@@ -49,7 +49,7 @@
     
     
     // Second Tab
-    ArchiveMasterTableViewController *archiveVC = [[ArchiveMasterTableViewController alloc] initWithPersistentContainer:[self persistentContainer]];
+    ArchiveMasterTableViewController *archiveVC = [[ArchiveMasterTableViewController alloc] initWithPersistentContainer:self.persistentContainer];
     UINavigationController *secondTabVC = [[UINavigationController alloc] initWithRootViewController:archiveVC];
     if (@available(iOS 13.0, *)) {
         secondTabVC.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"Archive"

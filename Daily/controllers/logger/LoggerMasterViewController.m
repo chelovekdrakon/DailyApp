@@ -9,6 +9,13 @@
 #import "LoggerMasterViewController.h"
 #import "LoggerInputViewController.h"
 
+#import "Daily+CoreDataClass.h"
+#import "Activity+CoreDataClass.h"
+#import "ActivityType+CoreDataClass.h"
+
+#import "NSDate+Range.h"
+#import "Constants.h"
+
 @interface LoggerMasterViewController ()
 @property (nonatomic, strong) UIView *containerView;
 @property (nonatomic, strong) NSPersistentContainer *persistentContainer;
@@ -70,13 +77,127 @@
     logButton.layer.cornerRadius = logButton.frame.size.width / 2;
 }
 
+// Button
+
 - (void)handleLogButtonPress:(id)sender {
     LoggerInputViewController *inputVC = [[LoggerInputViewController alloc] initWithCompletionHandler:^(NSDate * _Nonnull fromDate, NSDate * _Nonnull toDate, NSString * _Nonnull activityDescription) {
-        NSLog(@"");
+        
+        NSManagedObjectContext *context = self.persistentContainer.viewContext;
+        
+        // Today's Daily request (if exists already)
+        NSFetchRequest *request = [[NSFetchRequest alloc] init];
+        NSEntityDescription *entity = [NSEntityDescription entityForName:CD_ENITY_NAME_DAILY inManagedObjectContext:context];
+        [request setEntity:entity];
+    
+        NSDate *startDate = [NSDate dayStartOfDate:[NSDate date]];
+        NSDate *endDate = [NSDate dayEndOfDate:[NSDate date]];
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(date >= %@) AND (date <= %@)", startDate, endDate];
+        [request setPredicate:predicate];
+        
+        NSError *errorFetch = nil;
+        NSArray *arrayOfTodayDailies = [context executeFetchRequest:request error:&errorFetch];
+        if (errorFetch) {
+            NSLog(@"Failed to fetch daily!");
+        }
+        
+        // Daily
+        Daily *daily = arrayOfTodayDailies.count > 0
+            ? arrayOfTodayDailies[0]
+            : [NSEntityDescription insertNewObjectForEntityForName:CD_ENITY_NAME_DAILY inManagedObjectContext:context];
+        
+        // Activity Type
+        ActivityType *activityType = [NSEntityDescription insertNewObjectForEntityForName:CD_ENITY_NAME_ACITIVTY_TYPE inManagedObjectContext:context];
+        activityType.type = activityDescription;
+        activityType.clarification = activityDescription;
+        
+        // Activity
+        Activity *activity = [NSEntityDescription insertNewObjectForEntityForName:CD_ENITY_NAME_ACITIVTY inManagedObjectContext:context];
+        activity.type = activityType;
+        activity.from = fromDate;
+        activity.to = toDate;
+        
+        // Activities
+        NSMutableOrderedSet *activities = [daily.activities mutableCopy];
+        [activities addObject:activity];
+
+        // Update Daily
+        daily.activities = activities;
+        
+        
+        // Save Core Data Update
+        NSError *error;
+        if (![context save:&error]) {
+            NSLog(@"Failed to save - error: %@", [error localizedDescription]);
+        }
+        
+        for(Activity *activity in daily.activities) {
+            NSLog(@"Activity: %@", activity.type.clarification);
+        }
+        
+
     }];
     inputVC.modalPresentationStyle = UIModalPresentationPopover;
     
     [self presentViewController:inputVC animated:YES completion:nil];
+}
+
+// Helpers
+
+- (void)cleanUpCoreData {
+    NSManagedObjectContext *context = self.persistentContainer.viewContext;
+    
+    NSError *error;
+    
+    if (true) {
+        NSFetchRequest *request = [[NSFetchRequest alloc] init];
+        NSEntityDescription *entity = [NSEntityDescription entityForName:CD_ENITY_NAME_DAILY inManagedObjectContext:context];
+        [request setEntity:entity];
+
+        NSError *errorFetch = nil;
+        NSArray *array = [context executeFetchRequest:request error:&errorFetch];
+
+        for (Daily *daily in array) {
+            [context deleteObject:daily];
+        }
+    }
+
+    if (![context save:&error]) {
+        NSLog(@"Failed to save - error: %@", [error localizedDescription]);
+    }
+
+    if (true) {
+        NSFetchRequest *request = [[NSFetchRequest alloc] init];
+        NSEntityDescription *entity = [NSEntityDescription entityForName:CD_ENITY_NAME_ACITIVTY_TYPE inManagedObjectContext:context];
+        [request setEntity:entity];
+
+        NSError *errorFetch = nil;
+        NSArray *array = [context executeFetchRequest:request error:&errorFetch];
+
+        for(ActivityType *activityType in array) {
+            [context deleteObject:activityType];
+        }
+    }
+
+    if (![context save:&error]) {
+        NSLog(@"Failed to save - error: %@", [error localizedDescription]);
+    }
+
+    if (true) {
+        NSFetchRequest *request = [[NSFetchRequest alloc] init];
+        NSEntityDescription *entity = [NSEntityDescription entityForName:CD_ENITY_NAME_ACITIVTY inManagedObjectContext:context];
+        [request setEntity:entity];
+
+        NSError *errorFetch = nil;
+        NSArray *array = [context executeFetchRequest:request error:&errorFetch];
+
+        for(Activity *activity in array) {
+            [context deleteObject:activity];
+        }
+    }
+
+    if (![context save:&error]) {
+        NSLog(@"Failed to save - error: %@", [error localizedDescription]);
+    }
 }
 
 @end

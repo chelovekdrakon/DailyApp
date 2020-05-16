@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		325053792470476800462B1D /* Constants.m in Sources */ = {isa = PBXBuildFile; fileRef = 325053782470476800462B1D /* Constants.m */; };
+		3250537C2470593700462B1D /* Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 3250537B2470593700462B1D /* Utils.m */; };
+		3250538424705C0200462B1D /* NSDate+Range.m in Sources */ = {isa = PBXBuildFile; fileRef = 3250538324705C0200462B1D /* NSDate+Range.m */; };
 		3288CC3024669B3A00CBC765 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 3288CC2F24669B3A00CBC765 /* AppDelegate.m */; };
 		3288CC3324669B3A00CBC765 /* SceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 3288CC3224669B3A00CBC765 /* SceneDelegate.m */; };
 		3288CC3924669B3A00CBC765 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3288CC3724669B3A00CBC765 /* Main.storyboard */; };
@@ -21,6 +24,12 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		325053772470476800462B1D /* Constants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
+		325053782470476800462B1D /* Constants.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Constants.m; sourceTree = "<group>"; };
+		3250537A2470593700462B1D /* Utils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Utils.h; sourceTree = "<group>"; };
+		3250537B2470593700462B1D /* Utils.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Utils.m; sourceTree = "<group>"; };
+		3250538224705C0200462B1D /* NSDate+Range.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSDate+Range.h"; sourceTree = "<group>"; };
+		3250538324705C0200462B1D /* NSDate+Range.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSDate+Range.m"; sourceTree = "<group>"; };
 		3288CC2B24669B3900CBC765 /* Daily.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Daily.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3288CC2E24669B3A00CBC765 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		3288CC2F24669B3A00CBC765 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -53,6 +62,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		3250538124705B8F00462B1D /* categories */ = {
+			isa = PBXGroup;
+			children = (
+				3250538224705C0200462B1D /* NSDate+Range.h */,
+				3250538324705C0200462B1D /* NSDate+Range.m */,
+			);
+			path = categories;
+			sourceTree = "<group>";
+		};
 		3288CC2224669B3900CBC765 = {
 			isa = PBXGroup;
 			children = (
@@ -83,6 +101,11 @@
 				3288CC4224669B3A00CBC765 /* Info.plist */,
 				3288CC4324669B3A00CBC765 /* main.m */,
 				3288CC3A24669B3A00CBC765 /* Daily.xcdatamodeld */,
+				325053772470476800462B1D /* Constants.h */,
+				325053782470476800462B1D /* Constants.m */,
+				3250537A2470593700462B1D /* Utils.h */,
+				3250537B2470593700462B1D /* Utils.m */,
+				3250538124705B8F00462B1D /* categories */,
 			);
 			path = Daily;
 			sourceTree = "<group>";
@@ -196,14 +219,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3250538424705C0200462B1D /* NSDate+Range.m in Sources */,
 				3288CC4424669B3A00CBC765 /* main.m in Sources */,
 				3288CC3C24669B3A00CBC765 /* Daily.xcdatamodeld in Sources */,
 				32DACF6A246807610044E06C /* LoggerMasterViewController.m in Sources */,
+				3250537C2470593700462B1D /* Utils.m in Sources */,
 				3288CC3024669B3A00CBC765 /* AppDelegate.m in Sources */,
 				32DACF642467F3DA0044E06C /* ArchiveDetailsViewController.m in Sources */,
 				32DACF6E246873EE0044E06C /* LoggerInputViewController.m in Sources */,
 				3288CC3324669B3A00CBC765 /* SceneDelegate.m in Sources */,
 				32DACF612467EF810044E06C /* ArchiveMasterTableViewController.m in Sources */,
+				325053792470476800462B1D /* Constants.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
