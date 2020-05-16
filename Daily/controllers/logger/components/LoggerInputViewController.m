@@ -119,7 +119,7 @@
 }
 
 
-#pragma mark - Helpers
+#pragma mark - Render Modal
 
 - (void)drawModal {
     // Container init

@@ -77,7 +77,7 @@
     logButton.layer.cornerRadius = logButton.frame.size.width / 2;
 }
 
-// Button
+#pragma mark - Button
 
 - (void)handleLogButtonPress:(id)sender {
     LoggerInputViewController *inputVC = [[LoggerInputViewController alloc] initWithCompletionHandler:^(NSDate * _Nonnull fromDate, NSDate * _Nonnull toDate, NSString * _Nonnull activityDescription) {
@@ -88,9 +88,11 @@
         NSFetchRequest *request = [[NSFetchRequest alloc] init];
         NSEntityDescription *entity = [NSEntityDescription entityForName:CD_ENITY_NAME_DAILY inManagedObjectContext:context];
         [request setEntity:entity];
+        
+        NSDate *now = [NSDate date];
     
-        NSDate *startDate = [NSDate dayStartOfDate:[NSDate date]];
-        NSDate *endDate = [NSDate dayEndOfDate:[NSDate date]];
+        NSDate *startDate = [NSDate dayStartOfDate:now];
+        NSDate *endDate = [NSDate dayEndOfDate:now];
         NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(date >= %@) AND (date <= %@)", startDate, endDate];
         [request setPredicate:predicate];
         
@@ -105,6 +107,10 @@
             ? arrayOfTodayDailies[0]
             : [NSEntityDescription insertNewObjectForEntityForName:CD_ENITY_NAME_DAILY inManagedObjectContext:context];
         
+        if (arrayOfTodayDailies.count == 0) {
+            daily.date = now;
+        }
+        
         // Activity Type
         ActivityType *activityType = [NSEntityDescription insertNewObjectForEntityForName:CD_ENITY_NAME_ACITIVTY_TYPE inManagedObjectContext:context];
         activityType.type = activityDescription;
@@ -115,6 +121,7 @@
         activity.type = activityType;
         activity.from = fromDate;
         activity.to = toDate;
+        activity.spentTime = [toDate timeIntervalSinceDate:fromDate];
         
         // Activities
         NSMutableOrderedSet *activities = [daily.activities mutableCopy];
@@ -141,7 +148,7 @@
     [self presentViewController:inputVC animated:YES completion:nil];
 }
 
-// Helpers
+#pragma mark - Helpers
 
 - (void)cleanUpCoreData {
     NSManagedObjectContext *context = self.persistentContainer.viewContext;

@@ -13,7 +13,7 @@
         <relationship name="activities" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Activity" inverseName="type" inverseEntity="Activity"/>
     </entity>
     <entity name="Daily" representedClassName="Daily" syncable="YES" codeGenerationType="class">
-        <attribute name="date" attributeType="Date" defaultDateTimeInterval="611348460" usesScalarValueType="NO"/>
+        <attribute name="date" attributeType="Date" usesScalarValueType="NO"/>
         <relationship name="activities" toMany="YES" minCount="1" deletionRule="Nullify" ordered="YES" destinationEntity="Activity" inverseName="daily" inverseEntity="Activity"/>
     </entity>
     <elements>
