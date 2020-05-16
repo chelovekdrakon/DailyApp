@@ -9,8 +9,11 @@
 #import "ArchiveMasterTableViewController.h"
 #import "ArchiveDetailsViewController.h"
 
+#import "Daily+CoreDataClass.h"
+#import "Constants.h"
+
 @interface ArchiveMasterTableViewController ()
-@property (nonatomic, copy) NSArray<NSArray<NSDictionary *> *> *dataSource;
+@property (nonatomic, copy) NSArray<Daily *> *dataSource;
 @property (nonatomic, strong) NSPersistentContainer *persistentContainer;
 @end
 
@@ -19,8 +22,8 @@
 - (instancetype)initWithPersistentContainer:(NSPersistentContainer *)persistentContainer {
     self = [super init];
     if (self) {
-        _dataSource = [self getDataSource];
         _persistentContainer = persistentContainer;
+        _dataSource = [self getDataSource];
     }
     return self;
 }
@@ -53,13 +56,15 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return self.dataSource[section].count;
+    return 1;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"UITableViewCell" forIndexPath:indexPath];
     
-    cell.textLabel.text = self.dataSource[indexPath.section][indexPath.row][@"date"];
+    Daily *daily = self.dataSource[indexPath.row];
+    
+    cell.textLabel.text = [daily.date description];
     
     return cell;
 }
@@ -69,30 +74,29 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:true];
     
-    ArchiveDetailsViewController *detailsVC = [[ArchiveDetailsViewController alloc] initWithDayData:self.dataSource[indexPath.section][indexPath.row]];
+    ArchiveDetailsViewController *detailsVC = [[ArchiveDetailsViewController alloc] initWithDayData:self.dataSource[indexPath.row]];
 //    [self.navigationController pushViewController:detailsVC animated:YES];
     [self.splitViewController showDetailViewController:detailsVC sender:self];
 }
 
 #pragma mark - Helpers
 
-- (NSArray<NSArray<NSDictionary *> *> *)getDataSource {
-    return @[
-        @[
-            @{
-                @"date": @"Sunday, 10th of May",
-            },
-            @{
-                @"date": @"Saturday, 9th of May",
-            },
-            @{
-                @"date": @"Friday, 8th of May",
-            },
-            @{
-                @"date": @"Thursday, 7th of May",
-            },
-        ]
-    ];
+- (NSArray<Daily *> *)getDataSource {
+    NSManagedObjectContext *context = self.persistentContainer.viewContext;
+        
+    // Today's Daily request (if exists already)
+    NSFetchRequest *request = [[NSFetchRequest alloc] init];
+    NSEntityDescription *entity = [NSEntityDescription entityForName:CD_ENITY_NAME_DAILY inManagedObjectContext:context];
+    [request setEntity:entity];
+    
+    NSError *errorFetch = nil;
+    NSArray *dailies = [context executeFetchRequest:request error:&errorFetch];
+    
+    if (errorFetch) {
+        NSLog(@"Failed to fetch daily! %@", [errorFetch localizedDescription]);
+    }
+    
+    return dailies;
 }
 
 /*

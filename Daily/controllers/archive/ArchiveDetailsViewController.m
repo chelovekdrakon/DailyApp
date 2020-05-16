@@ -9,14 +9,14 @@
 #import "ArchiveDetailsViewController.h"
 
 @interface ArchiveDetailsViewController ()
-@property (nonatomic, copy) NSDictionary *dayData;
+@property (nonatomic, copy) Daily *dayData;
 
 @property (nonatomic, strong) UIView *containerView;
 @end
 
 @implementation ArchiveDetailsViewController
 
-- (instancetype)initWithDayData:(NSDictionary *)dayData {
+- (instancetype)initWithDayData:(Daily *)dayData {
     self = [super init];
     if (self) {
         _dayData = dayData;
@@ -37,7 +37,7 @@
     [self.view addSubview:containerView];
     self.containerView = containerView;
     
-    NSString *date = [NSString stringWithFormat:@"%@", self.dayData[@"date"]];
+    NSString *date = [NSString stringWithFormat:@"%@", self.dayData.date];
     
     UILabel *label = [[UILabel alloc] init];
     label.translatesAutoresizingMaskIntoConstraints = NO;

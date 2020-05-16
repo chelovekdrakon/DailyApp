@@ -99,7 +99,7 @@
         NSError *errorFetch = nil;
         NSArray *arrayOfTodayDailies = [context executeFetchRequest:request error:&errorFetch];
         if (errorFetch) {
-            NSLog(@"Failed to fetch daily!");
+            NSLog(@"Failed to fetch daily! %@", [errorFetch localizedDescription]);
         }
         
         // Daily

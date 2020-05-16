@@ -8,11 +8,13 @@
 
 #import <UIKit/UIKit.h>
 
+#import "Daily+CoreDataClass.h"
+
 NS_ASSUME_NONNULL_BEGIN
 
 @interface ArchiveDetailsViewController : UIViewController
 
-- (instancetype)initWithDayData:(NSDictionary *)dayData;
+- (instancetype)initWithDayData:(Daily *)dayData;
 
 @end
 
