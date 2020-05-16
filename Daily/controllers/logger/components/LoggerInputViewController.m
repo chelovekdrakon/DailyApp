@@ -85,14 +85,6 @@
     } completion:nil];
 }
 
-
-#pragma mark - UITextViewDelegate
-
-- (void)textViewDidEndEditing:(UITextView *)textView {
-    NSLog(@"did end editing");
-}
-
-
 #pragma mark - Button
 
 - (void)handleLogPress:(id)sender {
@@ -256,7 +248,6 @@
     descriptionTextView.layer.borderColor = [UIColor systemPinkColor].CGColor;
     descriptionTextView.layer.cornerRadius = 5.0f;
     [descriptionTextView setFont:[UIFont systemFontOfSize:15.0f]];
-    descriptionTextView.delegate = self;
     [self.modalView addSubview:descriptionTextView];
     self.descriptionTextView = descriptionTextView;
     
