@@ -15,6 +15,8 @@
 @interface ArchiveMasterTableViewController ()
 @property (nonatomic, copy) NSArray<Daily *> *dataSource;
 @property (nonatomic, strong) NSPersistentContainer *persistentContainer;
+
+@property (nonatomic, strong) NSDateFormatter *dateFormatter;
 @end
 
 @implementation ArchiveMasterTableViewController
@@ -33,6 +35,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+//    self.navigationController.navigationBarHidden = YES;
+    
     if (self.persistentContainer == nil) {
         NSException *exception = [[NSException alloc] initWithName:@"wrong-init"
                                                             reason:@"ArchiveMasterTableViewController should be initialized with initWithPersistentContainer method"
@@ -43,8 +47,16 @@
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
     
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    self.navigationItem.hidesBackButton = YES;
+    
+    NSLocale *locale = [NSLocale currentLocale];
+    
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    dateFormatter.locale = locale;
+    dateFormatter.dateFormat = @"EEEE, d MMMM";
+    self.dateFormatter = dateFormatter;
+    
+    self.navigationItem.title = [dateFormatter stringFromDate:[NSDate date]];
     
     [self.tableView registerClass:UITableViewCell.class forCellReuseIdentifier:@"UITableViewCell"];
 }
@@ -52,11 +64,11 @@
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return self.dataSource.count;
+    return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 1;
+    return self.dataSource.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -64,7 +76,7 @@
     
     Daily *daily = self.dataSource[indexPath.row];
     
-    cell.textLabel.text = [daily.date description];
+    cell.textLabel.text = [self.dateFormatter stringFromDate:daily.date];
     
     return cell;
 }
@@ -75,7 +87,6 @@
     [tableView deselectRowAtIndexPath:indexPath animated:true];
     
     ArchiveDetailsViewController *detailsVC = [[ArchiveDetailsViewController alloc] initWithDayData:self.dataSource[indexPath.row]];
-//    [self.navigationController pushViewController:detailsVC animated:YES];
     [self.splitViewController showDetailViewController:detailsVC sender:self];
 }
 

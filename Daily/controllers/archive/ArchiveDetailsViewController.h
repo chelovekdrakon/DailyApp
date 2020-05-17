@@ -14,7 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface ArchiveDetailsViewController : UIViewController
 
-- (instancetype)initWithDayData:(Daily *)dayData;
+- (instancetype)initWithDayData:(Daily *)daily;
 
 @end
 
