@@ -45,6 +45,16 @@
     return self;
 }
 
+- (instancetype)initWithDate:(NSDate *)date dateFormatter:(NSDateFormatter *)dateFormatter onDateChange:(DateChangeHandler)onDateChange {
+    self = [super init];
+    if (self) {
+        _date = date;
+        _onDateChange = onDateChange;
+        _dateFormatter = dateFormatter;
+    }
+    return self;
+}
+
 #pragma mark - Lifecycle
 
 - (void)viewDidLoad {
@@ -81,6 +91,9 @@
         self.date = newDate;
     } onComplete:^(NSDate * _Nonnull newDate) {
         self.date = newDate;
+        if (self.onDateChange) {
+            self.onDateChange(newDate);
+        }
     }];
     
     datePickerModal.modalPresentationStyle = UIModalPresentationOverCurrentContext;

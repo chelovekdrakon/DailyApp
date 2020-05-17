@@ -22,12 +22,18 @@
     self.window = window;
     [self.window makeKeyAndVisible];
     
+    if (@available(iOS 13, *)) {
+       self.window.overrideUserInterfaceStyle = UIUserInterfaceStyleLight;
+    }
+    
     [UIView appearance].tintColor = UIColor.systemPinkColor;
     
     return YES;
 }
 
 - (UIViewController *)rootViewController {
+    
+    
     // Split VC
     UISplitViewController *splitVC = [UISplitViewController new];
     splitVC.preferredDisplayMode = UISplitViewControllerDisplayModePrimaryOverlay;

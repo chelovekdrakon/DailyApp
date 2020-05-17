@@ -24,6 +24,10 @@
     self.window = window;
     [self.window makeKeyAndVisible];
     
+    if (@available(iOS 13, *)) {
+       self.window.overrideUserInterfaceStyle = UIUserInterfaceStyleLight;
+    }
+    
     [UIView appearance].tintColor = UIColor.systemPinkColor;
 }
 

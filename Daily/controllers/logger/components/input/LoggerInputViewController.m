@@ -55,28 +55,28 @@
         [self.containerView.trailingAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.trailingAnchor],
     ]];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
+    [self drawModal];
+    
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-    [self drawModal];
-    
     self.modalView.layer.cornerRadius = 20.0f;
 }
 
 
-#pragma mark - Keyboard
+#pragma mark - Keyboard | off for now
 
 - (void)keyboardWillShow:(NSNotification *)notification {
     [UIView animateWithDuration:0.25 animations:^{
         CGRect keyboardRect = [[notification.userInfo objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
-        
+
         CGRect newFrame = self.containerView.frame;
         newFrame.origin.y -= (keyboardRect.size.height / 2);
-        
+
         [self.containerView setFrame:newFrame];
     } completion:nil];
 }
@@ -84,10 +84,10 @@
 - (void)keyboardWillHide:(NSNotification *)notification {
     [UIView animateWithDuration:0.25 animations:^{
         CGRect keyboardRect = [[notification.userInfo objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue];
-        
+
         CGRect newFrame = self.containerView.frame;
         newFrame.origin.y += (keyboardRect.size.height / 2);
-        
+
         [self.containerView setFrame:newFrame];
     } completion:nil];
 }
@@ -96,6 +96,26 @@
 
 - (void)handleLogPress:(id)sender {
     __weak LoggerInputViewController *weakSelf = self;
+    
+    NSCalendar *calendar = [NSCalendar currentCalendar];
+    
+    BOOL isFromBeforeTo = [calendar compareDate:self.fromDatePicker.date toDate:self.toDatePicker.date toUnitGranularity:NSCalendarUnitSecond] == NSOrderedAscending;
+    
+    if (!isFromBeforeTo) {
+        UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Based on provided info, your activity was finished before even started :) \nCheck dates!"
+                                       message:nil
+                                       preferredStyle:UIAlertControllerStyleAlert];
+        
+        UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"OK"
+                                                                style:UIAlertActionStyleDefault
+                                                              handler:nil];
+         
+        [alert addAction:defaultAction];
+        
+        [self presentViewController:alert animated:YES completion:nil];
+        
+        return;
+    }
     
     if (self.descriptionTextView.hasText == NO) {
         UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Provide Activity Description"
@@ -111,11 +131,13 @@
         [alert addAction:defaultAction];
         
         [self presentViewController:alert animated:YES completion:nil];
-    } else {
-        [self dismissViewControllerAnimated:YES completion:^{
-            weakSelf.completionHandler(weakSelf.fromDatePicker.date, weakSelf.toDatePicker.date, weakSelf.descriptionTextView.text);
-        }];
+        
+        return;
     }
+    
+    [self dismissViewControllerAnimated:YES completion:^{
+        weakSelf.completionHandler(weakSelf.fromDatePicker.date, weakSelf.toDatePicker.date, weakSelf.descriptionTextView.text);
+    }];
 }
 
 
@@ -219,7 +241,6 @@
     toDatePickerLabel.textAlignment = NSTextAlignmentCenter;
     [self.modalView addSubview:toDatePickerLabel];
     
-    
     DateViewController *toDatePicker = [[DateViewController alloc] initWithDate:[NSDate date]];
     toDatePicker.view.translatesAutoresizingMaskIntoConstraints = NO;
     [self addChildViewController:toDatePicker];
@@ -285,5 +306,6 @@
     ]];
     logButton.layer.cornerRadius = logButton.frame.size.width / 2;
 }
+
 
 @end

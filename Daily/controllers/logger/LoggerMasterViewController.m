@@ -31,6 +31,8 @@
 
 @implementation LoggerMasterViewController
 
+#pragma mark - Initialization
+
 - (instancetype)initWithPersistentContainer:(NSPersistentContainer *)persistentContainer {
     self = [super init];
     if (self) {
