@@ -20,6 +20,11 @@
 #import "Constants.h"
 
 @interface LoggerMasterViewController ()
+@property (nonatomic, strong) NSDate *date;
+@property (nonatomic, strong) Daily *daily;
+@property (nonatomic, strong) Daily *nextDaily;
+@property (nonatomic, strong) Daily *previousDaily;
+
 @property (nonatomic, strong) UIView *containerView;
 @property (nonatomic, strong) NSPersistentContainer *persistentContainer;
 @end
@@ -29,7 +34,29 @@
 - (instancetype)initWithPersistentContainer:(NSPersistentContainer *)persistentContainer {
     self = [super init];
     if (self) {
+        _date = [NSDate date];
         _persistentContainer = persistentContainer;
+        _daily = [self getDailyForDate:_date];
+    }
+    return self;
+}
+
+- (instancetype)initWithPersistentContainer:(NSPersistentContainer *)persistentContainer date:(NSDate *)date {
+    self = [super init];
+    if (self) {
+        _date = date;
+        _persistentContainer = persistentContainer;
+        _daily = [self getDailyForDate:_date];
+    }
+    return self;
+}
+
+- (instancetype)initWithPersistentContainer:(NSPersistentContainer *)persistentContainer daily:(Daily *)daily {
+    self = [super init];
+    if (self) {
+        _date = daily.date;
+        _persistentContainer = persistentContainer;
+        _daily = daily;
     }
     return self;
 }
@@ -38,6 +65,44 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    self.navigationItem.hidesBackButton = YES;
+    
+    NSLocale *locale = [NSLocale currentLocale];
+    
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    dateFormatter.locale = locale;
+    dateFormatter.dateFormat = @"EEEE, d MMMM";
+    
+    self.navigationItem.title = [dateFormatter stringFromDate:self.daily.date];
+    
+    // Right Bar
+    self.nextDaily = [self fetchNextDailyFromDaily:self.daily];
+    if (self.nextDaily) {
+        UIImage *rightButtonImage;
+        if (@available(iOS 13.0, *)) {
+            rightButtonImage = [UIImage systemImageNamed:@"chevron.right"];
+        } else {
+            rightButtonImage = [UIImage imageNamed:@"chevronRight"];
+        }
+        
+        UIBarButtonItem *rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:rightButtonImage style:UIBarButtonItemStylePlain target:self action:@selector(handleNextPress:)];
+        self.navigationItem.rightBarButtonItem = rightBarButtonItem;
+    }
+    
+    // Left Bar
+    self.previousDaily = [self fetchPreviousDailyFromDaily:self.daily];
+        if (self.previousDaily) {
+        UIImage *leftButtonImage;
+        if (@available(iOS 13.0, *)) {
+            leftButtonImage = [UIImage systemImageNamed:@"chevron.left"];
+        } else {
+            leftButtonImage = [UIImage imageNamed:@"chevronLeft"];
+        }
+        
+        UIBarButtonItem *leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:leftButtonImage style:UIBarButtonItemStylePlain target:self action:@selector(handleBackPress:)];
+        self.navigationItem.leftBarButtonItem = leftBarButtonItem;
+    }
     
     if (self.persistentContainer == nil) {
         NSException *exception = [[NSException alloc] initWithName:@"wrong-init"
@@ -80,39 +145,12 @@
     logButton.layer.cornerRadius = logButton.frame.size.width / 2;
 }
 
-#pragma mark - Button
+#pragma mark - Buttons
 
 - (void)handleLogButtonPress:(id)sender {
     LoggerInputViewController *inputVC = [[LoggerInputViewController alloc] initWithCompletionHandler:^(NSDate * _Nonnull fromDate, NSDate * _Nonnull toDate, NSString * _Nonnull activityDescription) {
         
         NSManagedObjectContext *context = self.persistentContainer.viewContext;
-        
-        // Today's Daily request (if exists already)
-        NSFetchRequest *request = [[NSFetchRequest alloc] init];
-        NSEntityDescription *entity = [NSEntityDescription entityForName:CD_ENITY_NAME_DAILY inManagedObjectContext:context];
-        [request setEntity:entity];
-        
-        NSDate *now = [NSDate date];
-    
-        NSDate *startDate = [NSDate dayStartOfDate:now];
-        NSDate *endDate = [NSDate dayEndOfDate:now];
-        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(date >= %@) AND (date <= %@)", startDate, endDate];
-        [request setPredicate:predicate];
-        
-        NSError *errorFetch = nil;
-        NSArray *arrayOfTodayDailies = [context executeFetchRequest:request error:&errorFetch];
-        if (errorFetch) {
-            NSLog(@"Failed to fetch daily! %@", [errorFetch localizedDescription]);
-        }
-        
-        // Daily
-        Daily *daily = arrayOfTodayDailies.count > 0
-            ? arrayOfTodayDailies[0]
-            : [NSEntityDescription insertNewObjectForEntityForName:CD_ENITY_NAME_DAILY inManagedObjectContext:context];
-        
-        if (arrayOfTodayDailies.count == 0) {
-            daily.date = now;
-        }
         
         // Activity Type
         ActivityType *activityType = [NSEntityDescription insertNewObjectForEntityForName:CD_ENITY_NAME_ACITIVTY_TYPE inManagedObjectContext:context];
@@ -127,7 +165,7 @@
         activity.spentTime = [toDate timeIntervalSinceDate:fromDate];
         
         // Add Activity
-        [daily addActivitiesObject:activity];
+        [self.daily addActivitiesObject:activity];
         
         // Save Core Data Update
         NSError *error;
@@ -135,7 +173,7 @@
             NSLog(@"Failed to save - error: %@", [error localizedDescription]);
         }
         
-        for(Activity *activity in daily.activities) {
+        for(Activity *activity in self.daily.activities) {
             NSLog(@"Activity: %@", activity.type.clarification);
         }
         
@@ -146,7 +184,96 @@
     [self presentViewController:inputVC animated:YES completion:nil];
 }
 
+- (void)handleBackPress:(id)sender {
+    LoggerMasterViewController *nextVC = [[LoggerMasterViewController alloc] initWithPersistentContainer:self.persistentContainer daily:self.previousDaily];
+    
+    NSMutableArray *vcs = [NSMutableArray arrayWithArray:self.navigationController.viewControllers];
+    [vcs insertObject:nextVC atIndex:[vcs count]-1];
+    [self.navigationController setViewControllers:vcs animated:NO];
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
+- (void)handleNextPress:(id)sender {
+    LoggerMasterViewController *nextVC = [[LoggerMasterViewController alloc] initWithPersistentContainer:self.persistentContainer daily:self.nextDaily];
+    [self.navigationController pushViewController:nextVC animated:YES];
+    
+    NSMutableArray *vcs = [NSMutableArray arrayWithArray:self.navigationController.viewControllers];
+    [vcs removeObjectAtIndex:0];
+    [self.navigationController setViewControllers:vcs animated:NO];
+}
+
 #pragma mark - Helpers
+
+- (Daily *)getDailyForDate:(NSDate *)date {
+    NSManagedObjectContext *context = self.persistentContainer.viewContext;
+        
+    // Today's Daily request (if exists already)
+    NSFetchRequest *request = [[NSFetchRequest alloc] init];
+    NSEntityDescription *entity = [NSEntityDescription entityForName:CD_ENITY_NAME_DAILY inManagedObjectContext:context];
+    [request setEntity:entity];
+
+
+    NSDate *startDate = [NSDate dayStartOfDate:date];
+    NSDate *endDate = [NSDate dayEndOfDate:date];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(date >= %@) AND (date <= %@)", startDate, endDate];
+    [request setPredicate:predicate];
+    
+    NSError *errorFetch = nil;
+    NSArray *arrayOfTodayDailies = [context executeFetchRequest:request error:&errorFetch];
+    if (errorFetch) {
+        NSLog(@"Failed to fetch daily! %@", [errorFetch localizedDescription]);
+    }
+    
+    // Daily
+    if (arrayOfTodayDailies.count > 0) {
+        Daily *daily = arrayOfTodayDailies[0];
+        return daily;
+    } else {
+        Daily *daily = [NSEntityDescription insertNewObjectForEntityForName:CD_ENITY_NAME_DAILY inManagedObjectContext:context];
+        daily.date = date;
+        return daily;
+    }
+}
+
+- (Daily *)fetchPreviousDailyFromDaily:(Daily *)daily {
+    NSManagedObjectContext *context = self.persistentContainer.viewContext;
+        
+    // Today's Daily request (if exists already)
+    NSFetchRequest *request = [[NSFetchRequest alloc] init];
+    NSEntityDescription *entity = [NSEntityDescription entityForName:CD_ENITY_NAME_DAILY inManagedObjectContext:context];
+    [request setEntity:entity];
+
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"date < %@", daily.date];
+    [request setPredicate:predicate];
+    
+    NSError *errorFetch = nil;
+    NSArray *arrayOfDailies = [context executeFetchRequest:request error:&errorFetch];
+    if (errorFetch) {
+        NSLog(@"Failed to fetch daily! %@", [errorFetch localizedDescription]);
+    }
+    
+    return arrayOfDailies.lastObject;
+}
+
+- (Daily *)fetchNextDailyFromDaily:(Daily *)daily {
+    NSManagedObjectContext *context = self.persistentContainer.viewContext;
+        
+    // Today's Daily request (if exists already)
+    NSFetchRequest *request = [[NSFetchRequest alloc] init];
+    NSEntityDescription *entity = [NSEntityDescription entityForName:CD_ENITY_NAME_DAILY inManagedObjectContext:context];
+    [request setEntity:entity];
+
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"date > %@", daily.date];
+    [request setPredicate:predicate];
+    
+    NSError *errorFetch = nil;
+    NSArray *arrayOfDailies = [context executeFetchRequest:request error:&errorFetch];
+    if (errorFetch) {
+        NSLog(@"Failed to fetch daily! %@", [errorFetch localizedDescription]);
+    }
+    
+    return arrayOfDailies.firstObject;
+}
 
 - (void)cleanUpCoreData {
     NSManagedObjectContext *context = self.persistentContainer.viewContext;

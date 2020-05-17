@@ -45,7 +45,6 @@
     } else {
         firstTabVC.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"Logger" image:[UIImage imageNamed:@"flame"] tag:0];
     }
-    [firstTabVC setNavigationBarHidden:YES];
     
     
     // Second Tab

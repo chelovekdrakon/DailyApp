@@ -9,6 +9,10 @@
 #import "LoggerInputViewController.h"
 #import "DatePickerViewController.h"
 
+// Core Date
+#import "Activity+CoreDataClass.h"
+#import "ActivityType+CoreDataClass.h"
+
 @interface LoggerInputViewController() <UITextViewDelegate>
 @property (nonatomic, copy) CompletionHandler completionHandler;
 

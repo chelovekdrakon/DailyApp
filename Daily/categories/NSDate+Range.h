@@ -15,6 +15,9 @@ NS_ASSUME_NONNULL_BEGIN
 + (NSDate *)dayStartOfDate:(NSDate *)date;
 + (NSDate *)dayEndOfDate:(NSDate *)date;
 
++ (NSDate *)dayBeforeDate:(NSDate *)date;
++ (NSDate *)dayAfterDate:(NSDate *)date;
+
 @end
 
 NS_ASSUME_NONNULL_END

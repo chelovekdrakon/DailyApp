@@ -29,4 +29,26 @@
     return dayEnd;
 }
 
++ (NSDate *)dayBeforeDate:(NSDate *)date {
+    NSCalendar *calendar = [NSCalendar currentCalendar];
+    
+    NSDateComponents *components = [[NSDateComponents alloc] init];
+    components.day = -1;
+    
+    NSDate *dayBefore = [calendar dateByAddingComponents:components toDate:date options:kNilOptions];
+    
+    return dayBefore;
+}
+
++ (NSDate *)dayAfterDate:(NSDate *)date {
+    NSCalendar *calendar = [NSCalendar currentCalendar];
+    
+    NSDateComponents *components = [[NSDateComponents alloc] init];
+    components.day = 1;
+    
+    NSDate *dayAfter = [calendar dateByAddingComponents:components toDate:date options:kNilOptions];
+    
+    return dayAfter;
+}
+
 @end
