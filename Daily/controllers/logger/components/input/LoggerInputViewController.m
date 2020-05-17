@@ -7,6 +7,7 @@
 //
 
 #import "LoggerInputViewController.h"
+#import "DatePickerViewController.h"
 
 @interface LoggerInputViewController() <UITextViewDelegate>
 @property (nonatomic, copy) CompletionHandler completionHandler;
@@ -14,8 +15,8 @@
 @property (nonatomic, strong) UIView *modalView;
 @property (nonatomic, strong) UIView *containerView;
 
-@property (nonatomic, strong) UIDatePicker *fromDatePicker;
-@property (nonatomic, strong) UIDatePicker *toDatePicker;
+@property (nonatomic, strong) DatePickerViewController *fromDatePicker;
+@property (nonatomic, strong) DatePickerViewController *toDatePicker;
 @property (nonatomic, strong) UITextView *descriptionTextView;
 @end
 
@@ -163,7 +164,6 @@
     
     
     // Date Pickers init
-    NSLocale *locale = [[NSLocale alloc] initWithLocaleIdentifier:@"ru_RU"];
     
     // From... Date picker init
     UILabel *fromDatePickerLabel = [[UILabel alloc] init];
@@ -173,22 +173,29 @@
     fromDatePickerLabel.textAlignment = NSTextAlignmentCenter;
     [self.modalView addSubview:fromDatePickerLabel];
     
-    UIDatePicker *fromDatePicker = [[UIDatePicker alloc] init];
-    [fromDatePicker setLocale:locale];
-    fromDatePicker.translatesAutoresizingMaskIntoConstraints = NO;
-    fromDatePicker.date = [NSDate date];
-    fromDatePicker.datePickerMode = UIDatePickerModeTime;
-    [self.modalView addSubview:fromDatePicker];
+    DatePickerViewController *fromDatePicker = [[DatePickerViewController alloc] initWithDate:[NSDate date]];
+    fromDatePicker.view.translatesAutoresizingMaskIntoConstraints = NO;
+    [self addChildViewController:fromDatePicker];
+    [self.view addSubview:fromDatePicker.view];
+    [fromDatePicker didMoveToParentViewController:self];
     self.fromDatePicker = fromDatePicker;
+    
+//    UIDatePicker *fromDatePicker = [[UIDatePicker alloc] init];
+//    [fromDatePicker setLocale:locale];
+//    fromDatePicker.translatesAutoresizingMaskIntoConstraints = NO;
+//    fromDatePicker.date = [NSDate date];
+//    fromDatePicker.datePickerMode = UIDatePickerModeTime;
+//    [self.modalView addSubview:fromDatePicker];
+//    self.fromDatePicker = fromDatePicker;
     
     [NSLayoutConstraint activateConstraints:@[
         [fromDatePickerLabel.topAnchor constraintEqualToAnchor:titleLabelDividerView.bottomAnchor constant:20.0f],
         [fromDatePickerLabel.widthAnchor constraintEqualToAnchor:self.modalView.widthAnchor multiplier:0.5 constant:-(self.modalView.layoutMargins.left + self.modalView.layoutMargins.right)],
         [fromDatePickerLabel.leadingAnchor constraintEqualToAnchor:self.modalView.leadingAnchor constant:self.modalView.layoutMargins.left],
         
-        [fromDatePicker.topAnchor constraintEqualToAnchor:fromDatePickerLabel.bottomAnchor],
-        [fromDatePicker.leadingAnchor constraintEqualToAnchor:fromDatePickerLabel.leadingAnchor],
-        [fromDatePicker.widthAnchor constraintEqualToAnchor:fromDatePickerLabel.widthAnchor],
+        [fromDatePicker.view.topAnchor constraintEqualToAnchor:fromDatePickerLabel.bottomAnchor],
+        [fromDatePicker.view.leadingAnchor constraintEqualToAnchor:fromDatePickerLabel.leadingAnchor],
+        [fromDatePicker.view.widthAnchor constraintEqualToAnchor:fromDatePickerLabel.widthAnchor],
     ]];
     
     // From.. To.. "|" divider
@@ -200,7 +207,7 @@
     [NSLayoutConstraint activateConstraints:@[
         [datePickersDivider.topAnchor constraintEqualToAnchor:fromDatePickerLabel.topAnchor],
         [datePickersDivider.leadingAnchor constraintEqualToAnchor:fromDatePickerLabel.trailingAnchor constant:5.0f],
-        [datePickersDivider.bottomAnchor constraintEqualToAnchor:fromDatePicker.bottomAnchor],
+        [datePickersDivider.bottomAnchor constraintEqualToAnchor:fromDatePicker.view.bottomAnchor],
         [datePickersDivider.widthAnchor constraintEqualToConstant:1.0f],
     ]];
     
@@ -212,13 +219,22 @@
     toDatePickerLabel.textAlignment = NSTextAlignmentCenter;
     [self.modalView addSubview:toDatePickerLabel];
     
-    UIDatePicker *toDatePicker = [[UIDatePicker alloc] init];
-    [toDatePicker setLocale:locale];
-    toDatePicker.translatesAutoresizingMaskIntoConstraints = NO;
-    toDatePicker.date = [NSDate date];
-    toDatePicker.datePickerMode = UIDatePickerModeTime;
-    [self.modalView addSubview:toDatePicker];
+    
+    DatePickerViewController *toDatePicker = [[DatePickerViewController alloc] initWithDate:[NSDate date]];
+    toDatePicker.view.translatesAutoresizingMaskIntoConstraints = NO;
+    [self addChildViewController:toDatePicker];
+    [self.view addSubview:toDatePicker.view];
+    [toDatePicker didMoveToParentViewController:self];
     self.toDatePicker = toDatePicker;
+    
+    
+//    UIDatePicker *toDatePicker = [[UIDatePicker alloc] init];
+//    [toDatePicker setLocale:locale];
+//    toDatePicker.translatesAutoresizingMaskIntoConstraints = NO;
+//    toDatePicker.date = [NSDate date];
+//    toDatePicker.datePickerMode = UIDatePickerModeTime;
+//    [self.modalView addSubview:toDatePicker];
+//    self.toDatePicker = toDatePicker;
     
     
     [NSLayoutConstraint activateConstraints:@[
@@ -226,10 +242,10 @@
         [toDatePickerLabel.leadingAnchor constraintEqualToAnchor:datePickersDivider.trailingAnchor constant:5.0f],
         [toDatePickerLabel.trailingAnchor constraintEqualToAnchor:self.modalView.trailingAnchor constant:-self.modalView.layoutMargins.right],
         
-        [toDatePicker.topAnchor constraintEqualToAnchor:fromDatePicker.topAnchor],
-        [toDatePicker.leadingAnchor constraintEqualToAnchor:toDatePickerLabel.leadingAnchor],
-        [toDatePicker.trailingAnchor constraintEqualToAnchor:toDatePickerLabel.trailingAnchor],
-        [toDatePicker.bottomAnchor constraintEqualToAnchor:fromDatePicker.bottomAnchor],
+        [toDatePicker.view.topAnchor constraintEqualToAnchor:fromDatePicker.view.topAnchor],
+        [toDatePicker.view.leadingAnchor constraintEqualToAnchor:toDatePickerLabel.leadingAnchor],
+        [toDatePicker.view.trailingAnchor constraintEqualToAnchor:toDatePickerLabel.trailingAnchor],
+        [toDatePicker.view.bottomAnchor constraintEqualToAnchor:fromDatePicker.view.bottomAnchor],
     ]];
     
     

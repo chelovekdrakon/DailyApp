@@ -7,8 +7,11 @@
 //
 
 #import "LoggerMasterViewController.h"
+
+// Controllers
 #import "LoggerInputViewController.h"
 
+// Core Date
 #import "Daily+CoreDataClass.h"
 #import "Activity+CoreDataClass.h"
 #import "ActivityType+CoreDataClass.h"

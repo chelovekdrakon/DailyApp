@@ -17,10 +17,12 @@
 		3288CC3E24669B3A00CBC765 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3288CC3D24669B3A00CBC765 /* Assets.xcassets */; };
 		3288CC4124669B3A00CBC765 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3288CC3F24669B3A00CBC765 /* LaunchScreen.storyboard */; };
 		3288CC4424669B3A00CBC765 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 3288CC4324669B3A00CBC765 /* main.m */; };
+		32CF0869247120AA0073F29F /* DatePickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 32CF0868247120AA0073F29F /* DatePickerViewController.m */; };
 		32DACF612467EF810044E06C /* ArchiveMasterTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 32DACF602467EF810044E06C /* ArchiveMasterTableViewController.m */; };
 		32DACF642467F3DA0044E06C /* ArchiveDetailsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 32DACF632467F3DA0044E06C /* ArchiveDetailsViewController.m */; };
 		32DACF6A246807610044E06C /* LoggerMasterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 32DACF69246807610044E06C /* LoggerMasterViewController.m */; };
 		32DACF6E246873EE0044E06C /* LoggerInputViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 32DACF6D246873EE0044E06C /* LoggerInputViewController.m */; };
+		32F4CF2124716ED500EE8C4D /* UILabelPaddings.m in Sources */ = {isa = PBXBuildFile; fileRef = 32F4CF2024716ED500EE8C4D /* UILabelPaddings.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -41,6 +43,8 @@
 		3288CC4024669B3A00CBC765 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		3288CC4224669B3A00CBC765 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3288CC4324669B3A00CBC765 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		32CF0867247120AA0073F29F /* DatePickerViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DatePickerViewController.h; sourceTree = "<group>"; };
+		32CF0868247120AA0073F29F /* DatePickerViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DatePickerViewController.m; sourceTree = "<group>"; };
 		32DACF5F2467EF810044E06C /* ArchiveMasterTableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ArchiveMasterTableViewController.h; sourceTree = "<group>"; };
 		32DACF602467EF810044E06C /* ArchiveMasterTableViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ArchiveMasterTableViewController.m; sourceTree = "<group>"; };
 		32DACF622467F3DA0044E06C /* ArchiveDetailsViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ArchiveDetailsViewController.h; sourceTree = "<group>"; };
@@ -49,6 +53,8 @@
 		32DACF69246807610044E06C /* LoggerMasterViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LoggerMasterViewController.m; sourceTree = "<group>"; };
 		32DACF6C246873EE0044E06C /* LoggerInputViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LoggerInputViewController.h; sourceTree = "<group>"; };
 		32DACF6D246873EE0044E06C /* LoggerInputViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LoggerInputViewController.m; sourceTree = "<group>"; };
+		32F4CF1F24716ED500EE8C4D /* UILabelPaddings.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UILabelPaddings.h; sourceTree = "<group>"; };
+		32F4CF2024716ED500EE8C4D /* UILabelPaddings.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UILabelPaddings.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -94,6 +100,7 @@
 				3288CC2F24669B3A00CBC765 /* AppDelegate.m */,
 				3288CC3124669B3A00CBC765 /* SceneDelegate.h */,
 				3288CC3224669B3A00CBC765 /* SceneDelegate.m */,
+				32F4CF222471714D00EE8C4D /* components */,
 				32DACF65246806F30044E06C /* controllers */,
 				3288CC3724669B3A00CBC765 /* Main.storyboard */,
 				3288CC3D24669B3A00CBC765 /* Assets.xcassets */,
@@ -108,6 +115,25 @@
 				3250538124705B8F00462B1D /* categories */,
 			);
 			path = Daily;
+			sourceTree = "<group>";
+		};
+		32CF08662471205E0073F29F /* input */ = {
+			isa = PBXGroup;
+			children = (
+				32CF086A247120AE0073F29F /* components */,
+				32DACF6C246873EE0044E06C /* LoggerInputViewController.h */,
+				32DACF6D246873EE0044E06C /* LoggerInputViewController.m */,
+			);
+			path = input;
+			sourceTree = "<group>";
+		};
+		32CF086A247120AE0073F29F /* components */ = {
+			isa = PBXGroup;
+			children = (
+				32CF0867247120AA0073F29F /* DatePickerViewController.h */,
+				32CF0868247120AA0073F29F /* DatePickerViewController.m */,
+			);
+			path = components;
 			sourceTree = "<group>";
 		};
 		32DACF65246806F30044E06C /* controllers */ = {
@@ -143,8 +169,16 @@
 		32DACF6B246873C70044E06C /* components */ = {
 			isa = PBXGroup;
 			children = (
-				32DACF6C246873EE0044E06C /* LoggerInputViewController.h */,
-				32DACF6D246873EE0044E06C /* LoggerInputViewController.m */,
+				32CF08662471205E0073F29F /* input */,
+			);
+			path = components;
+			sourceTree = "<group>";
+		};
+		32F4CF222471714D00EE8C4D /* components */ = {
+			isa = PBXGroup;
+			children = (
+				32F4CF1F24716ED500EE8C4D /* UILabelPaddings.h */,
+				32F4CF2024716ED500EE8C4D /* UILabelPaddings.m */,
 			);
 			path = components;
 			sourceTree = "<group>";
@@ -223,6 +257,7 @@
 				3288CC4424669B3A00CBC765 /* main.m in Sources */,
 				3288CC3C24669B3A00CBC765 /* Daily.xcdatamodeld in Sources */,
 				32DACF6A246807610044E06C /* LoggerMasterViewController.m in Sources */,
+				32CF0869247120AA0073F29F /* DatePickerViewController.m in Sources */,
 				3250537C2470593700462B1D /* Utils.m in Sources */,
 				3288CC3024669B3A00CBC765 /* AppDelegate.m in Sources */,
 				32DACF642467F3DA0044E06C /* ArchiveDetailsViewController.m in Sources */,
@@ -230,6 +265,7 @@
 				3288CC3324669B3A00CBC765 /* SceneDelegate.m in Sources */,
 				32DACF612467EF810044E06C /* ArchiveMasterTableViewController.m in Sources */,
 				325053792470476800462B1D /* Constants.m in Sources */,
+				32F4CF2124716ED500EE8C4D /* UILabelPaddings.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
