@@ -147,9 +147,9 @@
 
 #pragma mark - Buttons
 
-- (void)handleLogButtonPress:(id)sender {
-    LoggerInputViewController *inputVC = [[LoggerInputViewController alloc] initWithCompletionHandler:^(NSDate * _Nonnull fromDate, NSDate * _Nonnull toDate, NSString * _Nonnull activityDescription) {
-        
+- (void)handleLogButtonPress:(id)sender {    
+    LoggerInputViewController *inputVC = [[LoggerInputViewController alloc] initForDaily:self.daily
+                                                                       completionHandler:^(NSDate * _Nonnull fromDate, NSDate * _Nonnull toDate, NSString * _Nonnull activityDescription) {
         NSManagedObjectContext *context = self.persistentContainer.viewContext;
         
         // Activity Type

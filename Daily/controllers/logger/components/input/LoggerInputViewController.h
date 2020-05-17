@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "Daily+CoreDataClass.h"
 
 typedef void(^CompletionHandler)(
                                  NSDate * _Nonnull fromDate,
@@ -17,7 +18,7 @@ typedef void(^CompletionHandler)(
 NS_ASSUME_NONNULL_BEGIN
 
 @interface LoggerInputViewController : UIViewController
-- (instancetype)initWithCompletionHandler:(CompletionHandler)completionHandler;
+- (instancetype)initForDaily:(Daily *)daily completionHandler:(CompletionHandler)completionHandler;
 @end
 
 NS_ASSUME_NONNULL_END

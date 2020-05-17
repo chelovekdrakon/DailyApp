@@ -7,119 +7,85 @@
 //
 
 #import "DatePickerViewController.h"
-#import "UILabelPaddings.h"
+#import "NSDate+Range.h"
 
 @interface DatePickerViewController ()
-@property (nonatomic, strong) UILabel *timeLabel;
+@property (nonatomic, copy) CompletionHandler onComplete;
+@property (nonatomic, copy) ChangeHandler onChange;
 @end
 
 @implementation DatePickerViewController
-
-#pragma mark - Init
 
 - (instancetype)init {
     self = [super init];
     if (self) {
         _date = [NSDate date];
-        _dateFormatter = [self defaultDateFormatter];
     }
     return self;
 }
 
-- (instancetype)initWithDate:(NSDate *)date {
+- (instancetype)initWithDate:(NSDate *)date onChange:(ChangeHandler)onChange onComplete:(CompletionHandler)onComplete {
     self = [super init];
     if (self) {
         _date = date;
-        _dateFormatter = [self defaultDateFormatter];
+        _onComplete = [onComplete copy];
+        _onChange = [onChange copy];
     }
     return self;
 }
-
-- (instancetype)initWithDate:(NSDate *)date dateFormatter:(NSDateFormatter *)dateFormatter {
-    self = [super init];
-    if (self) {
-        _date = date;
-        _dateFormatter = dateFormatter;
-    }
-    return self;
-}
-
-#pragma mark - Lifecycle
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    UILabelPaddings *timeLabel = [[UILabelPaddings alloc] initWithPaddings:UIEdgeInsetsMake(20.0f, 0, 20.0f, 0)];
-    timeLabel.translatesAutoresizingMaskIntoConstraints = NO;
-    timeLabel.textAlignment = NSTextAlignmentCenter;
-    timeLabel.text = [self getTextFromDate:self.date];
-    timeLabel.font = [UIFont boldSystemFontOfSize:16.0f];
-    timeLabel.textColor = [UIColor blackColor];
-    
-    [self.view addSubview:timeLabel];
-    self.timeLabel = timeLabel;
+    UIView *containerView = [[UIView alloc] init];
+    containerView.backgroundColor = [UIColor lightTextColor];
+    containerView.translatesAutoresizingMaskIntoConstraints = NO;
+    containerView.layer.cornerRadius = 20.0f;
+    [self.view addSubview:containerView];
+    self.containerView = containerView;
     
     [NSLayoutConstraint activateConstraints:@[
-        [timeLabel.topAnchor constraintEqualToAnchor:self.view.topAnchor],
-        [timeLabel.rightAnchor constraintEqualToAnchor:self.view.rightAnchor],
-        [timeLabel.bottomAnchor constraintEqualToAnchor:self.view.bottomAnchor],
-        [timeLabel.leftAnchor constraintEqualToAnchor:self.view.leftAnchor],
+        [self.containerView.topAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.topAnchor],
+        [self.containerView.bottomAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.bottomAnchor],
+        [self.containerView.leadingAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.leadingAnchor],
+        [self.containerView.trailingAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.trailingAnchor],
+    ]];
+    
+    UIDatePicker *datePicker = [[UIDatePicker alloc] init];
+    [datePicker setLocale:[NSLocale currentLocale]];
+    datePicker.translatesAutoresizingMaskIntoConstraints = NO;
+    datePicker.backgroundColor = [UIColor whiteColor];
+    datePicker.date = self.date;
+    datePicker.minimumDate = [NSDate dayBeforeDate:self.date];
+    datePicker.maximumDate = [NSDate dayAfterDate:self.date];
+    
+    [datePicker addTarget:self action:@selector(handleDatePickerChange:) forControlEvents:UIControlEventValueChanged];
+    
+    [self.view addSubview:datePicker];
+    self.datePicker = datePicker;
+    
+    [NSLayoutConstraint activateConstraints:@[
+        [datePicker.centerXAnchor constraintEqualToAnchor:self.containerView.centerXAnchor],
+        [datePicker.centerYAnchor constraintEqualToAnchor:self.containerView.centerYAnchor],
+        [datePicker.leadingAnchor constraintEqualToAnchor:self.containerView.leadingAnchor],
+        [datePicker.trailingAnchor constraintEqualToAnchor:self.containerView.trailingAnchor],
     ]];
 }
 
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
+- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+    if (self.onComplete) {
+        self.onComplete(self.date);
+    }
     
-    self.timeLabel.layer.cornerRadius = self.timeLabel.frame.size.height;
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
-#pragma mark - Touches
-
-- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
-    UIDatePicker *fromDatePicker = [[UIDatePicker alloc] init];
-    [fromDatePicker setLocale:[NSLocale currentLocale]];
-    fromDatePicker.translatesAutoresizingMaskIntoConstraints = NO;
-    fromDatePicker.backgroundColor = [UIColor lightTextColor];
-    fromDatePicker.date = self.date;
-
-    UIViewController *vc = [[UIViewController alloc] init];
-    vc.view.backgroundColor = [UIColor lightTextColor];
-    vc.modalPresentationStyle = UIModalPresentationOverCurrentContext;
+- (void)handleDatePickerChange:(UIDatePicker *)picker {
+    self.date = picker.date;
     
-    [vc.view addSubview:fromDatePicker];
-    
-    [NSLayoutConstraint activateConstraints:@[
-        [fromDatePicker.centerXAnchor constraintEqualToAnchor:vc.view.centerXAnchor],
-        [fromDatePicker.centerYAnchor constraintEqualToAnchor:vc.view.centerYAnchor],
-    ]];
-    
-    [self presentViewController:vc animated:YES completion:^{
-        NSLog(@"");
-    }];
-}
-
-#pragma mark - Helpers
-
-- (NSString *)getTextFromDate:(NSDate *)date {
-    return [self.dateFormatter stringFromDate:date];
-}
-
-- (NSDateFormatter *)defaultDateFormatter {
-    NSLocale *locale = [NSLocale currentLocale];
-    
-    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    dateFormatter.locale = locale;
-    dateFormatter.dateFormat = @"HH:mm";
-    
-    return dateFormatter;
-}
-
-#pragma mark - KVC
-
-- (void)setDate:(NSDate *)nextDate {
-    _date = nextDate;
-    
-    self.timeLabel.text = [self getTextFromDate:nextDate];
+    if (self.onChange) {
+        self.onChange(picker.date);
+    }
 }
 
 @end

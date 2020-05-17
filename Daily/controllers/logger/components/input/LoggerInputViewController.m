@@ -7,29 +7,31 @@
 //
 
 #import "LoggerInputViewController.h"
-#import "DatePickerViewController.h"
+#import "DateViewController.h"
 
 // Core Date
 #import "Activity+CoreDataClass.h"
 #import "ActivityType+CoreDataClass.h"
 
 @interface LoggerInputViewController() <UITextViewDelegate>
+@property (nonatomic, strong) Daily *daily;
 @property (nonatomic, copy) CompletionHandler completionHandler;
 
 @property (nonatomic, strong) UIView *modalView;
 @property (nonatomic, strong) UIView *containerView;
 
-@property (nonatomic, strong) DatePickerViewController *fromDatePicker;
-@property (nonatomic, strong) DatePickerViewController *toDatePicker;
+@property (nonatomic, strong) DateViewController *fromDatePicker;
+@property (nonatomic, strong) DateViewController *toDatePicker;
 @property (nonatomic, strong) UITextView *descriptionTextView;
 @end
 
 @implementation LoggerInputViewController
 
-- (instancetype)initWithCompletionHandler:(CompletionHandler)completionHandler {
+- (instancetype)initForDaily:(Daily *)daily completionHandler:(CompletionHandler)completionHandler {
     self = [super init];
     if (self) {
         _completionHandler = [completionHandler copy];
+        _daily = daily;
     }
     return self;
 }
@@ -173,24 +175,19 @@
     UILabel *fromDatePickerLabel = [[UILabel alloc] init];
     fromDatePickerLabel.translatesAutoresizingMaskIntoConstraints = NO;
     fromDatePickerLabel.text = @"From";
-//    [fromDatePickerLabel sizeToFit];
     fromDatePickerLabel.textAlignment = NSTextAlignmentCenter;
     [self.modalView addSubview:fromDatePickerLabel];
     
-    DatePickerViewController *fromDatePicker = [[DatePickerViewController alloc] initWithDate:[NSDate date]];
+    NSDate *initFromDatePickerDate = self.daily.activities.count > 0
+        ? self.daily.activities.lastObject.to
+        : [NSDate date];
+    
+    DateViewController *fromDatePicker = [[DateViewController alloc] initWithDate:initFromDatePickerDate];
     fromDatePicker.view.translatesAutoresizingMaskIntoConstraints = NO;
     [self addChildViewController:fromDatePicker];
     [self.view addSubview:fromDatePicker.view];
     [fromDatePicker didMoveToParentViewController:self];
     self.fromDatePicker = fromDatePicker;
-    
-//    UIDatePicker *fromDatePicker = [[UIDatePicker alloc] init];
-//    [fromDatePicker setLocale:locale];
-//    fromDatePicker.translatesAutoresizingMaskIntoConstraints = NO;
-//    fromDatePicker.date = [NSDate date];
-//    fromDatePicker.datePickerMode = UIDatePickerModeTime;
-//    [self.modalView addSubview:fromDatePicker];
-//    self.fromDatePicker = fromDatePicker;
     
     [NSLayoutConstraint activateConstraints:@[
         [fromDatePickerLabel.topAnchor constraintEqualToAnchor:titleLabelDividerView.bottomAnchor constant:20.0f],
@@ -202,7 +199,7 @@
         [fromDatePicker.view.widthAnchor constraintEqualToAnchor:fromDatePickerLabel.widthAnchor],
     ]];
     
-    // From.. To.. "|" divider
+    // Divider --- From | To
     UIView *datePickersDivider = [[UIView alloc] init];
     datePickersDivider.backgroundColor = [UIColor darkTextColor];
     datePickersDivider.translatesAutoresizingMaskIntoConstraints = NO;
@@ -219,27 +216,16 @@
     UILabel *toDatePickerLabel = [[UILabel alloc] init];
     toDatePickerLabel.translatesAutoresizingMaskIntoConstraints = NO;
     toDatePickerLabel.text = @"To";
-//    [toDatePickerLabel sizeToFit];
     toDatePickerLabel.textAlignment = NSTextAlignmentCenter;
     [self.modalView addSubview:toDatePickerLabel];
     
     
-    DatePickerViewController *toDatePicker = [[DatePickerViewController alloc] initWithDate:[NSDate date]];
+    DateViewController *toDatePicker = [[DateViewController alloc] initWithDate:[NSDate date]];
     toDatePicker.view.translatesAutoresizingMaskIntoConstraints = NO;
     [self addChildViewController:toDatePicker];
     [self.view addSubview:toDatePicker.view];
     [toDatePicker didMoveToParentViewController:self];
     self.toDatePicker = toDatePicker;
-    
-    
-//    UIDatePicker *toDatePicker = [[UIDatePicker alloc] init];
-//    [toDatePicker setLocale:locale];
-//    toDatePicker.translatesAutoresizingMaskIntoConstraints = NO;
-//    toDatePicker.date = [NSDate date];
-//    toDatePicker.datePickerMode = UIDatePickerModeTime;
-//    [self.modalView addSubview:toDatePicker];
-//    self.toDatePicker = toDatePicker;
-    
     
     [NSLayoutConstraint activateConstraints:@[
         [toDatePickerLabel.topAnchor constraintEqualToAnchor:fromDatePickerLabel.topAnchor],
