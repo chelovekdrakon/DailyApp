@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		321BB6402471CD6600A2FC43 /* NSString+TimeInterval.m in Sources */ = {isa = PBXBuildFile; fileRef = 321BB63F2471CD6600A2FC43 /* NSString+TimeInterval.m */; };
 		324459C22471AC0100EEEDB0 /* UIDatePickerLimited.m in Sources */ = {isa = PBXBuildFile; fileRef = 324459C12471AC0100EEEDB0 /* UIDatePickerLimited.m */; };
 		325053792470476800462B1D /* Constants.m in Sources */ = {isa = PBXBuildFile; fileRef = 325053782470476800462B1D /* Constants.m */; };
 		3250537C2470593700462B1D /* Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 3250537B2470593700462B1D /* Utils.m */; };
@@ -28,6 +29,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		321BB63E2471CD6600A2FC43 /* NSString+TimeInterval.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "NSString+TimeInterval.h"; path = "Daily/controllers/archive/NSString+TimeInterval.h"; sourceTree = SOURCE_ROOT; };
+		321BB63F2471CD6600A2FC43 /* NSString+TimeInterval.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "NSString+TimeInterval.m"; path = "Daily/controllers/archive/NSString+TimeInterval.m"; sourceTree = SOURCE_ROOT; };
 		324459C02471AC0100EEEDB0 /* UIDatePickerLimited.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UIDatePickerLimited.h; sourceTree = SOURCE_ROOT; };
 		324459C12471AC0100EEEDB0 /* UIDatePickerLimited.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UIDatePickerLimited.m; sourceTree = SOURCE_ROOT; };
 		325053772470476800462B1D /* Constants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
@@ -77,6 +80,8 @@
 		3250538124705B8F00462B1D /* categories */ = {
 			isa = PBXGroup;
 			children = (
+				321BB63E2471CD6600A2FC43 /* NSString+TimeInterval.h */,
+				321BB63F2471CD6600A2FC43 /* NSString+TimeInterval.m */,
 				3250538224705C0200462B1D /* NSDate+Range.h */,
 				3250538324705C0200462B1D /* NSDate+Range.m */,
 			);
@@ -272,6 +277,7 @@
 				3288CC3024669B3A00CBC765 /* AppDelegate.m in Sources */,
 				32DACF642467F3DA0044E06C /* ArchiveDetailsViewController.m in Sources */,
 				32F4CF2524719F9600EE8C4D /* DatePickerViewController.m in Sources */,
+				321BB6402471CD6600A2FC43 /* NSString+TimeInterval.m in Sources */,
 				324459C22471AC0100EEEDB0 /* UIDatePickerLimited.m in Sources */,
 				32DACF6E246873EE0044E06C /* LoggerInputViewController.m in Sources */,
 				3288CC3324669B3A00CBC765 /* SceneDelegate.m in Sources */,

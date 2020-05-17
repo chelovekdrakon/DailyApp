@@ -9,6 +9,7 @@
 #import "ArchiveDetailsViewController.h"
 #import "Activity+CoreDataClass.h"
 #import "ActivityType+CoreDataClass.h"
+#import "NSString+TimeInterval.h"
 
 @interface ArchiveDetailsViewController () <UITableViewDelegate, UITableViewDataSource>
 @property (nonatomic, copy) Daily *daily;
@@ -75,9 +76,10 @@
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
     Activity *activity = [self.daily.activities objectAtIndex:section];
     
-    NSString *text = [NSString stringWithFormat:@"%@ --> %@",
+    NSString *text = [NSString stringWithFormat:@"%@ --> %@ | %@",
                       [self.dateFormatter stringFromDate:activity.from],
-                      [self.dateFormatter stringFromDate:activity.to]
+                      [self.dateFormatter stringFromDate:activity.to],
+                      [NSString stringFromTimeInterval:activity.spentTime]
                       ];
     
     return text;
@@ -89,6 +91,12 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return self.daily.activities.count;
+}
+
+#pragma mark - UITableViewDelegate
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 @end
