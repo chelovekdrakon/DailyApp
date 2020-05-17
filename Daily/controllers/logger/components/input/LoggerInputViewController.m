@@ -274,7 +274,8 @@
     descriptionTextView.layer.borderWidth = 1.0f;
     descriptionTextView.layer.borderColor = [UIColor systemPinkColor].CGColor;
     descriptionTextView.layer.cornerRadius = 5.0f;
-    [descriptionTextView setFont:[UIFont systemFontOfSize:15.0f]];
+    descriptionTextView.font = [UIFont systemFontOfSize:15.0f];
+    descriptionTextView.autocorrectionType = UITextAutocorrectionTypeNo;
     [self.modalView addSubview:descriptionTextView];
     self.descriptionTextView = descriptionTextView;
     
