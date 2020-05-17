@@ -123,13 +123,8 @@
         activity.to = toDate;
         activity.spentTime = [toDate timeIntervalSinceDate:fromDate];
         
-        // Activities
-        NSMutableOrderedSet *activities = [daily.activities mutableCopy];
-        [activities addObject:activity];
-
-        // Update Daily
-        daily.activities = activities;
-        
+        // Add Activity
+        [daily addActivitiesObject:activity];
         
         // Save Core Data Update
         NSError *error;
