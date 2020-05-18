@@ -182,10 +182,12 @@
         ? LoggingPurposePlan
         : LoggingPurposeLog;
     
+    __weak LoggerMasterViewController *weakSelf = self;
+    
     LoggerInputViewController *inputVC = [[LoggerInputViewController alloc] initForDaily:self.daily
                                                                                  purpose:loggingPurpose
                                                                        completionHandler:^(NSDate * _Nonnull fromDate, NSDate * _Nonnull toDate, NSString * _Nonnull activityDescription) {
-        NSManagedObjectContext *context = self.persistentContainer.viewContext;
+        NSManagedObjectContext *context = weakSelf.persistentContainer.viewContext;
         
         // Activity Type
         ActivityType *activityType = [NSEntityDescription insertNewObjectForEntityForName:CD_ENITY_NAME_ACITIVTY_TYPE inManagedObjectContext:context];
@@ -202,7 +204,7 @@
             activity.to = toDate;
             activity.spentTime = [toDate timeIntervalSinceDate:fromDate];
             
-            [self.daily addActivitiesObject:activity];
+            [weakSelf.daily addActivitiesObject:activity];
         } else {
             PlannedActivity *plannedActivity = [NSEntityDescription insertNewObjectForEntityForName:CD_ENITY_NAME_ACITIVTY_PLANNED inManagedObjectContext:context];
             plannedActivity.type = activityType;
@@ -211,7 +213,7 @@
             plannedActivity.spentTime = [toDate timeIntervalSinceDate:fromDate];
             plannedActivity.isDone = NO;
             
-            [self.daily addPlannedActivitiesObject:plannedActivity];
+            [weakSelf.daily addPlannedActivitiesObject:plannedActivity];
         }
         
         // Save Core Data Update
@@ -219,6 +221,9 @@
         if (![context save:&error]) {
             NSLog(@"Failed to save - error: %@", [error localizedDescription]);
         }
+        
+        NSIndexSet *indexSet = [[NSIndexSet alloc] initWithIndex:[weakSelf.detailsTableViewController.tableView numberOfSections]];
+        [weakSelf.detailsTableViewController.tableView insertSections:indexSet withRowAnimation:UITableViewRowAnimationLeft];
         
         if (loggingPurpose == LoggingPurposeLog) {
             for(Activity *activity in self.daily.activities) {

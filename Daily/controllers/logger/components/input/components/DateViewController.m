@@ -87,12 +87,14 @@
 #pragma mark - Touches
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
+    __weak DateViewController *weakSelf = self;
+    
     DatePickerViewController *datePickerModal = [[DatePickerViewController alloc] initWithDate:self.date onChange:^(NSDate * _Nonnull newDate) {
-        self.date = newDate;
+        weakSelf.date = newDate;
     } onComplete:^(NSDate * _Nonnull newDate) {
-        self.date = newDate;
-        if (self.onDateChange) {
-            self.onDateChange(newDate);
+        weakSelf.date = newDate;
+        if (weakSelf.onDateChange) {
+            weakSelf.onDateChange(newDate);
         }
     }];
     

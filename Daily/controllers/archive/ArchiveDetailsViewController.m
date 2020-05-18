@@ -17,7 +17,7 @@
 
 @property (nonatomic, retain) NSArray<Activity *> *dataSource;
 
-@property (nonatomic, strong) UITableView *tableView;
+@property (nonatomic, strong, readwrite) UITableView *tableView;
 @property (nonatomic, strong) UISegmentedControl *segmentedControl;
 @end
 

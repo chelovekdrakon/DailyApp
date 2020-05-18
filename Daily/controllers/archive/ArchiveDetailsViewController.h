@@ -23,6 +23,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (instancetype)initWithDayData:(Daily *)daily;
 
+@property (nonatomic, strong, readonly) UITableView *tableView;
+
 @property (nonatomic, assign) DetailsSegment segmentedControlState;
 @property (nonatomic, copy) SegmentChangeHandler onSegmentStateChange;
 
