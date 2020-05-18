@@ -86,27 +86,12 @@
 
 #pragma mark - UITableViewDataSource
 
-- (NSInteger)tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 1;
-}
+// Section
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return (self.segmentedControlState == DetailsSegmentActivities)
         ? self.daily.activities.count
         : self.daily.plannedActivities.count;
-}
-
-- (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"UITableViewCell" forIndexPath:indexPath];
-    
-    Activity *activity = (self.segmentedControlState == DetailsSegmentActivities)
-        ? [self.daily.activities objectAtIndex:indexPath.section]
-        : [self.daily.plannedActivities objectAtIndex:indexPath.section];
-    
-    cell.textLabel.text = activity.type.type;
-    cell.textLabel.numberOfLines = 0;
-    
-    return cell;
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
@@ -121,6 +106,25 @@
                       ];
     
     return text;
+}
+
+// Row
+
+- (NSInteger)tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return 1;
+}
+
+- (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"UITableViewCell" forIndexPath:indexPath];
+    
+    Activity *activity = (self.segmentedControlState == DetailsSegmentActivities)
+        ? [self.daily.activities objectAtIndex:indexPath.section]
+        : [self.daily.plannedActivities objectAtIndex:indexPath.section];
+    
+    cell.textLabel.text = activity.type.type;
+    cell.textLabel.numberOfLines = 0;
+    
+    return cell;
 }
 
 #pragma mark - UITableViewDelegate
