@@ -15,10 +15,15 @@ typedef void(^CompletionHandler)(
                                  NSString * _Nonnull activityDescription
                                  );
 
+typedef NS_ENUM(NSInteger, LoggingPurpose) {
+    LoggingPurposeLog,
+    LoggingPurposePlan,
+};
+
 NS_ASSUME_NONNULL_BEGIN
 
 @interface LoggerInputViewController : UIViewController
-- (instancetype)initForDaily:(Daily *)daily completionHandler:(CompletionHandler)completionHandler;
+- (instancetype)initForDaily:(Daily *)daily purpose:(LoggingPurpose)logginPurpose completionHandler:(CompletionHandler)completionHandler;
 @end
 
 NS_ASSUME_NONNULL_END

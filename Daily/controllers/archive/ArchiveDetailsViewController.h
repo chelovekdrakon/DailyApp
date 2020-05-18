@@ -15,6 +15,8 @@ typedef NS_ENUM(NSInteger, DetailsSegment) {
     DetailsSegmentPlanned = 1,
 };
 
+typedef void(^SegmentChangeHandler)(DetailsSegment segmentState);
+
 NS_ASSUME_NONNULL_BEGIN
 
 @interface ArchiveDetailsViewController : UIViewController
@@ -22,6 +24,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (instancetype)initWithDayData:(Daily *)daily;
 
 @property (nonatomic, assign) DetailsSegment segmentedControlState;
+@property (nonatomic, copy) SegmentChangeHandler onSegmentStateChange;
 
 @end
 

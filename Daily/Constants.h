@@ -10,4 +10,5 @@
 
 extern NSString * const CD_ENITY_NAME_DAILY;
 extern NSString * const CD_ENITY_NAME_ACITIVTY;
+extern NSString * const CD_ENITY_NAME_ACITIVTY_PLANNED;
 extern NSString * const CD_ENITY_NAME_ACITIVTY_TYPE;

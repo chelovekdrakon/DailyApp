@@ -144,6 +144,10 @@
 - (void)setSegmentedControlState:(DetailsSegment)state {    
     _segmentedControlState = state;
     
+    if (self.onSegmentStateChange) {
+        self.onSegmentStateChange(state);
+    }
+    
     [self.tableView reloadData];
 }
 

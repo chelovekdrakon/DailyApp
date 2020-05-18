@@ -16,6 +16,7 @@
 @interface LoggerInputViewController() <UITextViewDelegate>
 @property (nonatomic, strong) Daily *daily;
 @property (nonatomic, copy) CompletionHandler completionHandler;
+@property (nonatomic, assign) LoggingPurpose logginPurpose;
 
 @property (nonatomic, strong) UIView *modalView;
 @property (nonatomic, strong) UIView *containerView;
@@ -27,11 +28,12 @@
 
 @implementation LoggerInputViewController
 
-- (instancetype)initForDaily:(Daily *)daily completionHandler:(CompletionHandler)completionHandler {
+- (instancetype)initForDaily:(Daily *)daily purpose:(LoggingPurpose)logginPurpose completionHandler:(CompletionHandler)completionHandler {
     self = [super init];
     if (self) {
         _completionHandler = [completionHandler copy];
         _daily = daily;
+        _logginPurpose = logginPurpose;
     }
     return self;
 }
@@ -171,7 +173,7 @@
     // Title init
     UILabel *titleLabel = [[UILabel alloc] init];
     titleLabel.translatesAutoresizingMaskIntoConstraints = NO;
-    titleLabel.text = @"Log your Recent Activity";
+    titleLabel.text = (self.logginPurpose == LoggingPurposeLog) ? @"Log your Recent Activity" : @"Plan your Next Activity";
     [titleLabel sizeToFit];
     [self.modalView addSubview:titleLabel];
     
@@ -200,9 +202,12 @@
     fromDatePickerLabel.textAlignment = NSTextAlignmentCenter;
     [self.modalView addSubview:fromDatePickerLabel];
     
-    NSDate *initFromDatePickerDate = self.daily.activities.count > 0
+    NSDate *now = [NSDate date];
+    NSOrderedSet *activities = (self.logginPurpose == LoggingPurposeLog) ? self.daily.activities : self.daily.plannedActivities;
+    
+    NSDate *initFromDatePickerDate = activities > 0
         ? self.daily.activities.lastObject.to
-        : [NSDate date];
+        : now;
     
     DateViewController *fromDatePicker = [[DateViewController alloc] initWithDate:initFromDatePickerDate];
     fromDatePicker.view.translatesAutoresizingMaskIntoConstraints = NO;
@@ -241,7 +246,11 @@
     toDatePickerLabel.textAlignment = NSTextAlignmentCenter;
     [self.modalView addSubview:toDatePickerLabel];
     
-    DateViewController *toDatePicker = [[DateViewController alloc] initWithDate:[NSDate date]];
+    NSDate *initToDatePickerDate = (self.logginPurpose == LoggingPurposeLog)
+        ? now
+        : initFromDatePickerDate;
+    
+    DateViewController *toDatePicker = [[DateViewController alloc] initWithDate:initToDatePickerDate];
     toDatePicker.view.translatesAutoresizingMaskIntoConstraints = NO;
     [self addChildViewController:toDatePicker];
     [self.view addSubview:toDatePicker.view];
@@ -263,7 +272,7 @@
     // Description Input
     UILabel *descriptionLabel = [[UILabel alloc] init];
     descriptionLabel.translatesAutoresizingMaskIntoConstraints = NO;
-    descriptionLabel.text = @"Describe what you have been done below";
+    descriptionLabel.text = (self.logginPurpose == LoggingPurposeLog) ? @"Describe what you have been done below" : @"Describe what is your plan below";
     [descriptionLabel sizeToFit];
     descriptionLabel.textAlignment = NSTextAlignmentCenter;
     [self.modalView addSubview:descriptionLabel];

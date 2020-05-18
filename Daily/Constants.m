@@ -10,4 +10,5 @@
 
 NSString * const CD_ENITY_NAME_DAILY = @"Daily";
 NSString * const CD_ENITY_NAME_ACITIVTY = @"Activity";
+NSString * const CD_ENITY_NAME_ACITIVTY_PLANNED = @"PlannedActivity";
 NSString * const CD_ENITY_NAME_ACITIVTY_TYPE = @"ActivityType";

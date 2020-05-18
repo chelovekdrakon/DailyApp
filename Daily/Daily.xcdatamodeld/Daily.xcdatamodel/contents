@@ -19,12 +19,12 @@
         <relationship name="plannedActivities" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="PlannedActivity"/>
     </entity>
     <entity name="PlannedActivity" representedClassName="PlannedActivity" parentEntity="Activity" syncable="YES" codeGenerationType="class">
-        <attribute name="isDone" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="isDone" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
     </entity>
     <elements>
         <element name="Activity" positionX="224.0234375" positionY="-67.65625" width="128" height="118"/>
         <element name="ActivityType" positionX="-54" positionY="-9" width="128" height="88"/>
         <element name="Daily" positionX="683.140625" positionY="-16.90625" width="128" height="103"/>
-        <element name="PlannedActivity" positionX="220.13671875" positionY="144.06640625" width="128" height="58"/>
+        <element name="PlannedActivity" positionX="224.7890625" positionY="146.625" width="128" height="58"/>
     </elements>
 </model>

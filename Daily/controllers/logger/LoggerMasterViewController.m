@@ -15,6 +15,7 @@
 // Core Date
 #import "Daily+CoreDataClass.h"
 #import "Activity+CoreDataClass.h"
+#import "PlannedActivity+CoreDataClass.h"
 #import "ActivityType+CoreDataClass.h"
 
 #import "NSDate+Range.h"
@@ -27,7 +28,9 @@
 @property (nonatomic, strong) Daily *previousDaily;
 
 @property (nonatomic, strong) UIView *containerView;
+@property (nonatomic, strong) UIButton *logButton;
 @property (nonatomic, strong) NSPersistentContainer *persistentContainer;
+@property (nonatomic, strong) ArchiveDetailsViewController *detailsTableViewController;
 @end
 
 @implementation LoggerMasterViewController
@@ -125,14 +128,16 @@
     [logButton.titleLabel setFont:[UIFont boldSystemFontOfSize:16.0f]];
     [logButton setTitle:@"Log Activity" forState:UIControlStateNormal];
     [logButton setTitleColor:UIColor.yellowColor forState:UIControlStateSelected];
-    logButton.contentEdgeInsets = UIEdgeInsetsMake(0, 15, 0, 15);
-    [logButton sizeToFit];
     logButton.translatesAutoresizingMaskIntoConstraints = NO;
     logButton.backgroundColor = UIColor.blackColor;
     
     [logButton addTarget:self action:@selector(handleLogButtonPress:)forControlEvents:UIControlEventTouchUpInside];
     
     [self.containerView addSubview:logButton];
+    self.logButton = logButton;
+    
+    CGSize buttonSize = CGSizeMake(115, 115);
+    logButton.layer.cornerRadius = buttonSize.width / 2;
     
     [NSLayoutConstraint activateConstraints:@[
         [self.containerView.topAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.topAnchor],
@@ -142,17 +147,24 @@
         
         [logButton.leadingAnchor constraintEqualToAnchor:self.containerView.leadingAnchor constant:70.0f],
         [logButton.bottomAnchor constraintEqualToAnchor:self.containerView.bottomAnchor constant:-120.0f],
-        [logButton.heightAnchor constraintEqualToAnchor:logButton.widthAnchor],
+        [logButton.heightAnchor constraintEqualToConstant:buttonSize.height],
+        [logButton.widthAnchor constraintEqualToConstant:buttonSize.width],
     ]];
-    
-    logButton.layer.cornerRadius = logButton.frame.size.width / 2;
     
     ArchiveDetailsViewController *detailsTableViewController = [[ArchiveDetailsViewController alloc] initWithDayData:self.daily];
     detailsTableViewController.view.translatesAutoresizingMaskIntoConstraints = NO;
+    detailsTableViewController.onSegmentStateChange = ^(DetailsSegment segmentState) {
+        if (segmentState == DetailsSegmentActivities) {
+            [self.logButton setTitle:@"Log Activity" forState:UIControlStateNormal];
+        } else {
+            [self.logButton setTitle:@"Plan Activity" forState:UIControlStateNormal];
+        }
+    };
     
     [self addChildViewController:detailsTableViewController];
     [self.containerView addSubview:detailsTableViewController.view];
     [detailsTableViewController didMoveToParentViewController:self];
+    self.detailsTableViewController = detailsTableViewController;
     
     [NSLayoutConstraint activateConstraints:@[
         [detailsTableViewController.view.topAnchor constraintEqualToAnchor:self.containerView.topAnchor],
@@ -165,8 +177,13 @@
 
 #pragma mark - Buttons
 
-- (void)handleLogButtonPress:(id)sender {    
+- (void)handleLogButtonPress:(id)sender {
+    LoggingPurpose loggingPurpose = (self.detailsTableViewController.segmentedControlState == DetailsSegmentPlanned)
+        ? LoggingPurposePlan
+        : LoggingPurposeLog;
+    
     LoggerInputViewController *inputVC = [[LoggerInputViewController alloc] initForDaily:self.daily
+                                                                                 purpose:loggingPurpose
                                                                        completionHandler:^(NSDate * _Nonnull fromDate, NSDate * _Nonnull toDate, NSString * _Nonnull activityDescription) {
         NSManagedObjectContext *context = self.persistentContainer.viewContext;
         
@@ -176,14 +193,26 @@
         activityType.clarification = activityDescription;
         
         // Activity
-        Activity *activity = [NSEntityDescription insertNewObjectForEntityForName:CD_ENITY_NAME_ACITIVTY inManagedObjectContext:context];
-        activity.type = activityType;
-        activity.from = fromDate;
-        activity.to = toDate;
-        activity.spentTime = [toDate timeIntervalSinceDate:fromDate];
         
         // Add Activity
-        [self.daily addActivitiesObject:activity];
+        if (loggingPurpose == LoggingPurposeLog) {
+            Activity *activity = [NSEntityDescription insertNewObjectForEntityForName:CD_ENITY_NAME_ACITIVTY inManagedObjectContext:context];
+            activity.type = activityType;
+            activity.from = fromDate;
+            activity.to = toDate;
+            activity.spentTime = [toDate timeIntervalSinceDate:fromDate];
+            
+            [self.daily addActivitiesObject:activity];
+        } else {
+            PlannedActivity *plannedActivity = [NSEntityDescription insertNewObjectForEntityForName:CD_ENITY_NAME_ACITIVTY_PLANNED inManagedObjectContext:context];
+            plannedActivity.type = activityType;
+            plannedActivity.from = fromDate;
+            plannedActivity.to = toDate;
+            plannedActivity.spentTime = [toDate timeIntervalSinceDate:fromDate];
+            plannedActivity.isDone = NO;
+            
+            [self.daily addPlannedActivitiesObject:plannedActivity];
+        }
         
         // Save Core Data Update
         NSError *error;
@@ -191,12 +220,17 @@
             NSLog(@"Failed to save - error: %@", [error localizedDescription]);
         }
         
-        for(Activity *activity in self.daily.activities) {
-            NSLog(@"Activity: %@", activity.type.clarification);
+        if (loggingPurpose == LoggingPurposeLog) {
+            for(Activity *activity in self.daily.activities) {
+                NSLog(@"Activity: %@", activity.type.clarification);
+            }
+        } else {
+            for(PlannedActivity *activity in self.daily.plannedActivities) {
+                NSLog(@"Activity: %@", activity.type.clarification);
+            }
         }
-        
-
     }];
+    
     inputVC.modalPresentationStyle = UIModalPresentationPopover;
     
     [self presentViewController:inputVC animated:YES completion:nil];
