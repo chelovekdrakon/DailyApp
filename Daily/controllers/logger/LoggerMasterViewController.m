@@ -295,7 +295,7 @@
 - (Daily *)fetchPreviousDailyFromDaily:(Daily *)daily {
     NSManagedObjectContext *context = self.persistentContainer.viewContext;
         
-    // Today's Daily request (if exists already)
+    // Previous Daily request (if exists already)
     NSFetchRequest *request = [[NSFetchRequest alloc] init];
     NSEntityDescription *entity = [NSEntityDescription entityForName:CD_ENITY_NAME_DAILY inManagedObjectContext:context];
     [request setEntity:entity];
@@ -314,10 +314,19 @@
 
 - (Daily *)fetchNextDailyFromDaily:(Daily *)daily {
     NSManagedObjectContext *context = self.persistentContainer.viewContext;
-        
-    // Today's Daily request (if exists already)
-    NSFetchRequest *request = [[NSFetchRequest alloc] init];
     NSEntityDescription *entity = [NSEntityDescription entityForName:CD_ENITY_NAME_DAILY inManagedObjectContext:context];
+    
+    NSDate *now = [NSDate date];
+    
+    // If it is today
+    if ([[NSCalendar currentCalendar] isDate:daily.date inSameDayAsDate:now]) {
+        Daily *daily = [NSEntityDescription insertNewObjectForEntityForName:CD_ENITY_NAME_DAILY inManagedObjectContext:context];
+        daily.date = [NSDate dayAfterDate:now];;
+        return daily;
+    }
+        
+    // Next Daily request (if exists already)
+    NSFetchRequest *request = [[NSFetchRequest alloc] init];
     [request setEntity:entity];
 
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"date > %@", daily.date];
