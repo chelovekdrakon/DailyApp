@@ -99,13 +99,26 @@
         ? [self.daily.activities objectAtIndex:section]
         : [self.daily.plannedActivities objectAtIndex:section];
     
-    NSString *text = [NSString stringWithFormat:@"%@ --> %@ | %@",
+    NSString *text = [NSString stringWithFormat:@"%@ --> %@               |         %@",
                       [self.dateFormatter stringFromDate:activity.from],
                       [self.dateFormatter stringFromDate:activity.to],
                       [NSString stringFromTimeInterval:activity.spentTime]
                       ];
     
     return text;
+}
+
+- (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section {
+    // Background color
+    view.tintColor = [UIColor colorWithRed:(53/255.0) green:(80/255.0) blue:(105/255.0) alpha:0.15f];
+
+    // Text Color
+    UITableViewHeaderFooterView *header = (UITableViewHeaderFooterView *)view;
+    [header.textLabel setTextColor:[UIColor blackColor]];
+
+    // Another way to set the background color
+    // Note: does not preserve gradient effect of original header
+    // header.contentView.backgroundColor = [UIColor blackColor];
 }
 
 // Row
