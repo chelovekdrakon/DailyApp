@@ -205,8 +205,8 @@
     NSDate *now = [NSDate date];
     NSOrderedSet *activities = (self.logginPurpose == LoggingPurposeLog) ? self.daily.activities : self.daily.plannedActivities;
     
-    NSDate *initFromDatePickerDate = activities > 0
-        ? self.daily.activities.lastObject.to
+    NSDate *initFromDatePickerDate = (activities.count > 0)
+        ? ((Activity *)activities.lastObject).to
         : now;
     
     DateViewController *fromDatePicker = [[DateViewController alloc] initWithDate:initFromDatePickerDate];
@@ -301,20 +301,23 @@
     // Log Button
     UIButton *logButton = [UIButton buttonWithType:UIButtonTypeSystem];
     [logButton.titleLabel setFont:[UIFont boldSystemFontOfSize:16.0f]];
-    [logButton setTitle:@"Log Activity" forState:UIControlStateNormal];
-    logButton.contentEdgeInsets = UIEdgeInsetsMake(0, 15, 0, 15);
-    [logButton sizeToFit];
+    [logButton setTitle:(self.logginPurpose == LoggingPurposeLog) ? @"Log Activity" : @"Plan Activity"
+               forState:UIControlStateNormal];
     logButton.translatesAutoresizingMaskIntoConstraints = NO;
     logButton.backgroundColor = UIColor.blackColor;
     [logButton addTarget:self action:@selector(handleLogPress:) forControlEvents:UIControlEventTouchUpInside];
+    
     [self.modalView addSubview:logButton];
     
+    CGSize buttonSize = CGSizeMake(115, 115);
+    logButton.layer.cornerRadius = buttonSize.width / 2;
+    
     [NSLayoutConstraint activateConstraints:@[
+        [logButton.heightAnchor constraintEqualToConstant:buttonSize.height],
+        [logButton.widthAnchor constraintEqualToConstant:buttonSize.width],
         [logButton.topAnchor constraintEqualToAnchor:descriptionTextView.bottomAnchor constant:20.0f],
         [logButton.centerXAnchor constraintEqualToAnchor:self.modalView.centerXAnchor],
-        [logButton.heightAnchor constraintEqualToAnchor:logButton.widthAnchor],
     ]];
-    logButton.layer.cornerRadius = logButton.frame.size.width / 2;
 }
 
 
