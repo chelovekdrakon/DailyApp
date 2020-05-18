@@ -10,6 +10,7 @@
 
 // Controllers
 #import "LoggerInputViewController.h"
+#import "ArchiveDetailsViewController.h"
 
 // Core Date
 #import "Daily+CoreDataClass.h"
@@ -145,6 +146,21 @@
     ]];
     
     logButton.layer.cornerRadius = logButton.frame.size.width / 2;
+    
+    ArchiveDetailsViewController *detailsTableViewController = [[ArchiveDetailsViewController alloc] initWithDayData:self.daily];
+    detailsTableViewController.view.translatesAutoresizingMaskIntoConstraints = NO;
+    
+    [self addChildViewController:detailsTableViewController];
+    [self.containerView addSubview:detailsTableViewController.view];
+    [detailsTableViewController didMoveToParentViewController:self];
+    
+    [NSLayoutConstraint activateConstraints:@[
+        [detailsTableViewController.view.topAnchor constraintEqualToAnchor:self.containerView.topAnchor],
+        [detailsTableViewController.view.leadingAnchor constraintEqualToAnchor:self.containerView.leadingAnchor],
+        [detailsTableViewController.view.trailingAnchor constraintEqualToAnchor:self.containerView.trailingAnchor],
+        [detailsTableViewController.view.bottomAnchor constraintEqualToAnchor:logButton.topAnchor constant:-20.0f],
+
+    ]];
 }
 
 #pragma mark - Buttons

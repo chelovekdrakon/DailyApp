@@ -10,11 +10,18 @@
 
 #import "Daily+CoreDataClass.h"
 
+typedef NS_ENUM(NSInteger, DetailsSegment) {
+    DetailsSegmentActivities = 0,
+    DetailsSegmentPlanned = 1,
+};
+
 NS_ASSUME_NONNULL_BEGIN
 
 @interface ArchiveDetailsViewController : UIViewController
 
 - (instancetype)initWithDayData:(Daily *)daily;
+
+@property (nonatomic, assign) DetailsSegment segmentedControlState;
 
 @end
 

@@ -13,12 +13,18 @@
         <relationship name="activities" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Activity" inverseName="type" inverseEntity="Activity"/>
     </entity>
     <entity name="Daily" representedClassName="Daily" syncable="YES" codeGenerationType="class">
+        <attribute name="activitiesMatchPlan" attributeType="Float" minValueString="0" maxValueString="100" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="date" attributeType="Date" usesScalarValueType="NO"/>
         <relationship name="activities" toMany="YES" minCount="1" deletionRule="Cascade" ordered="YES" destinationEntity="Activity" inverseName="daily" inverseEntity="Activity"/>
+        <relationship name="plannedActivities" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="PlannedActivity"/>
+    </entity>
+    <entity name="PlannedActivity" representedClassName="PlannedActivity" parentEntity="Activity" syncable="YES" codeGenerationType="class">
+        <attribute name="isDone" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
     </entity>
     <elements>
-        <element name="Activity" positionX="221.7578125" positionY="-23.84765625" width="128" height="118"/>
+        <element name="Activity" positionX="224.0234375" positionY="-67.65625" width="128" height="118"/>
         <element name="ActivityType" positionX="-54" positionY="-9" width="128" height="88"/>
-        <element name="Daily" positionX="584.80859375" positionY="-103.97265625" width="128" height="73"/>
+        <element name="Daily" positionX="683.140625" positionY="-16.90625" width="128" height="103"/>
+        <element name="PlannedActivity" positionX="220.13671875" positionY="144.06640625" width="128" height="58"/>
     </elements>
 </model>

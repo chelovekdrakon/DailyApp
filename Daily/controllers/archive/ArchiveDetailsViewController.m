@@ -15,7 +15,10 @@
 @property (nonatomic, copy) Daily *daily;
 @property (nonatomic, strong) NSDateFormatter *dateFormatter;
 
+@property (nonatomic, retain) NSArray<Activity *> *dataSource;
+
 @property (nonatomic, strong) UITableView *tableView;
+@property (nonatomic, strong) UISegmentedControl *segmentedControl;
 @end
 
 @implementation ArchiveDetailsViewController
@@ -24,6 +27,7 @@
     self = [super init];
     if (self) {
         _daily = daily;
+        _segmentedControlState = DetailsSegmentActivities;
         
         NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
         dateFormatter.timeStyle = NSDateFormatterShortStyle;
@@ -39,6 +43,30 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
+    self.view.backgroundColor = [UIColor whiteColor];
+    
+    UISegmentedControl *segmentedControl = [[UISegmentedControl alloc] initWithItems:@[@"Activities", @"Planned"]];
+    segmentedControl.translatesAutoresizingMaskIntoConstraints = NO;
+    UIFont *font = [UIFont systemFontOfSize:18.0f];
+    NSDictionary *attributes = [NSDictionary dictionaryWithObject:font
+                                                           forKey:NSFontAttributeName];
+    [segmentedControl setTitleTextAttributes:attributes
+                                    forState:UIControlStateNormal];
+    [segmentedControl setSelectedSegmentIndex:(NSInteger)self.segmentedControlState];
+    
+    [segmentedControl addTarget:self action:@selector(handleSegmentSwitch:) forControlEvents:UIControlEventValueChanged];
+    
+    [self.view addSubview:segmentedControl];
+    self.segmentedControl = segmentedControl;
+    
+    [NSLayoutConstraint activateConstraints:@[
+        [segmentedControl.topAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.topAnchor],
+        [segmentedControl.centerXAnchor constraintEqualToAnchor:self.view.centerXAnchor],
+        [segmentedControl.leadingAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.leadingAnchor],
+        [segmentedControl.trailingAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.trailingAnchor],
+        [segmentedControl.heightAnchor constraintEqualToConstant:40.0f]
+    ]];
+    
     UITableView *tableView = [[UITableView alloc] init];
     tableView.translatesAutoresizingMaskIntoConstraints = NO;
     tableView.delegate = self;
@@ -49,23 +77,31 @@
     self.tableView = tableView;
     
     [NSLayoutConstraint activateConstraints:@[
-        [self.tableView.topAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.topAnchor],
+        [self.tableView.topAnchor constraintEqualToAnchor:segmentedControl.bottomAnchor],
+        [self.tableView.leadingAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.leadingAnchor],
+        [self.tableView.trailingAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.trailingAnchor],
         [self.tableView.bottomAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.bottomAnchor],
-        [self.tableView.leftAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.leftAnchor],
-        [self.tableView.rightAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.rightAnchor],
     ]];
-}
-
-- (void)viewWillAppear:(BOOL)animated {
-    
 }
 
 #pragma mark - UITableViewDataSource
 
+- (NSInteger)tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return 1;
+}
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    return (self.segmentedControlState == DetailsSegmentActivities)
+        ? self.daily.activities.count
+        : self.daily.plannedActivities.count;
+}
+
 - (nonnull UITableViewCell *)tableView:(nonnull UITableView *)tableView cellForRowAtIndexPath:(nonnull NSIndexPath *)indexPath {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"UITableViewCell" forIndexPath:indexPath];
     
-    Activity *activity = [self.daily.activities objectAtIndex:indexPath.section];
+    Activity *activity = (self.segmentedControlState == DetailsSegmentActivities)
+        ? [self.daily.activities objectAtIndex:indexPath.section]
+        : [self.daily.plannedActivities objectAtIndex:indexPath.section];
     
     cell.textLabel.text = activity.type.type;
     cell.textLabel.numberOfLines = 0;
@@ -74,7 +110,9 @@
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
-    Activity *activity = [self.daily.activities objectAtIndex:section];
+    Activity *activity = (self.segmentedControlState == DetailsSegmentActivities)
+        ? [self.daily.activities objectAtIndex:section]
+        : [self.daily.plannedActivities objectAtIndex:section];
     
     NSString *text = [NSString stringWithFormat:@"%@ --> %@ | %@",
                       [self.dateFormatter stringFromDate:activity.from],
@@ -85,18 +123,24 @@
     return text;
 }
 
-- (NSInteger)tableView:(nonnull UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 1;
-}
-
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return self.daily.activities.count;
-}
-
 #pragma mark - UITableViewDelegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
+}
+
+#pragma mark - Controls
+
+- (void)handleSegmentSwitch:(UISegmentedControl *)control {
+    self.segmentedControlState = (DetailsSegment)control.selectedSegmentIndex;
+}
+
+#pragma mark - KVC
+
+- (void)setSegmentedControlState:(DetailsSegment)state {    
+    _segmentedControlState = state;
+    
+    [self.tableView reloadData];
 }
 
 @end
