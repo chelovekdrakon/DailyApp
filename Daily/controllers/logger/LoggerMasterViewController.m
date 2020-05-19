@@ -316,14 +316,14 @@
     NSManagedObjectContext *context = self.persistentContainer.viewContext;
     NSEntityDescription *entity = [NSEntityDescription entityForName:CD_ENITY_NAME_DAILY inManagedObjectContext:context];
     
-    NSDate *now = [NSDate date];
-    
-    // If it is today
-    if ([[NSCalendar currentCalendar] isDate:daily.date inSameDayAsDate:now]) {
-        Daily *daily = [NSEntityDescription insertNewObjectForEntityForName:CD_ENITY_NAME_DAILY inManagedObjectContext:context];
-        daily.date = [NSDate dayAfterDate:now];;
-        return daily;
-    }
+//    NSDate *now = [NSDate date];
+//
+//    // If it is today
+//    if ([[NSCalendar currentCalendar] isDate:daily.date inSameDayAsDate:now]) {
+//        Daily *daily = [NSEntityDescription insertNewObjectForEntityForName:CD_ENITY_NAME_DAILY inManagedObjectContext:context];
+//        daily.date = [NSDate dayAfterDate:now];;
+//        return daily;
+//    }
         
     // Next Daily request (if exists already)
     NSFetchRequest *request = [[NSFetchRequest alloc] init];
